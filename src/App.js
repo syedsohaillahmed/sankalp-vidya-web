@@ -26,11 +26,10 @@ function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
-  const isLoggedIn = useSelector(state => state.isLoggedin);
-  // console.log("state", state)
+  const isLoggedIn = useSelector((state) => state.isLoggedin);
+
   const user = isLoggedIn; // Replace with actual authentication logic later
 
-  
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -39,7 +38,10 @@ function App() {
           <Routes>
             {/* Public Routes */}
             {/* If logged in, redirect to Dashboard from login page */}
-            <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+            <Route
+              path="/login"
+              element={user ? <Navigate to="/" /> : <Login />}
+            />
             <Route path="/home" element={<Home />} />
 
             {/* Protected Layout */}
@@ -50,7 +52,8 @@ function App() {
                     <Sidebar isSidebar={isSidebar} />
                     <main className="content">
                       <Topbar setIsSidebar={setIsSidebar} />
-                      <Outlet /> {/* This makes sure the child routes render inside the layout */}
+                      <Outlet />{" "}
+                      {/* This makes sure the child routes render inside the layout */}
                     </main>
                   </>
                 }
@@ -81,5 +84,5 @@ function App() {
 
 export default App;
 
-//date,sid,sname,classgrade,subject,topic,logintime, 
+//date,sid,sname,classgrade,subject,topic,logintime,
 //

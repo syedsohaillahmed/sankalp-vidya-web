@@ -8,35 +8,19 @@ import { useSelector } from "react-redux";
 import { useHeaders } from "../../api/headers";
 import axios from "axios";
 import useFetch from "../../hooks/useFetch";
+import { getUserDetailsByIdUC } from "../../api/svUrlConstructs";
 
 const UserDetailPage = () => {
   const { id } = useParams();
   const accessToken = useSelector((state) => state.data.accessToken);
-  const headersdata = useHeaders();
-  console.log("headersdata", headersdata);
 
-  // const fetchData = async (id) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8000/api/v1/users/${id}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
   const { fetchData, response, error, loading } = useFetch();
 
+  const url = getUserDetailsByIdUC(id);
+
   useEffect(() => {
-    // fetchData(id);
     fetchData(
-      `http://localhost:8000/api/v1/users/${id}`,
+      getUserDetailsByIdUC(id),
       "GET",
       null,
       accessToken

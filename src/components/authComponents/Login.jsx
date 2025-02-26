@@ -16,7 +16,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const { register, handleSubmit } = useForm();
-  // console.log("register", register);
 
   const [response, error, loading, loginFunction] = useAxiosFunction();
 
@@ -26,33 +25,19 @@ const Login = () => {
       password: data.password,
     };
 
-    console.log("data", data2);
-
     loginFunction({
       axiosInstance: axios,
-      method: 'post',
-      url: '/users/login',
-      data:data2
-  });
-
-
-    // dispatch(login({ data: userdata })); // Corrected dispatch
+      method: "post",
+      url: "/users/login",
+      data: data2,
+    });
   };
 
-  useEffect(()=>{
-
-    if(response?.statuscode === 200){
-      console.log("logged in")
-          dispatch(login({ data: response.data })); // Corrected dispatch
-
+  useEffect(() => {
+    if (response?.statuscode === 200) {
+      dispatch(login({ data: response.data }));
     }
-
-
-    console.log("response", response)
-    console.log("error", error)
-    console.log("loading", loading)
-
-  }, [response, error, loading])
+  }, [response, error, loading]);
 
   return (
     <Container

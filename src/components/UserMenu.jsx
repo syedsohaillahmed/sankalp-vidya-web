@@ -7,12 +7,7 @@ const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const accessToken = useSelector((state) => state.data.accessToken);
-      const refreshToken = useSelector((state) => state.data.refreshToken);
-  
-      console.log("accessToken", useSelector((state) => state))
-
-  const userId =  useSelector((state) => state.data.user._id);
+  const userId = useSelector((state) => state.data.user._id);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
