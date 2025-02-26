@@ -33,13 +33,13 @@ const UserDetailPage = () => {
   useEffect(() => {
     if (response?.statuscode === 200) {
       reset({
-        fullName: response.data.fullName,
-        userName: response.data.userName || "",
-        email: response.data.email || "",
-        contact: response.data.phoneNo,
-        alternateContactNumber: response.data.alternateContactNumber || "",
-        gender: response.data.gender,
-        role: response.data.role,
+        fullName: response.data.userDetails.fullName,
+        userName: response.data.userDetails.userName || "",
+        email: response.data.userDetails.email || "",
+        contact: response.data.userDetails.phoneNo,
+        alternateContactNumber: response.data.userDetails.alternatePhoneNo || "",
+        gender: response.data.userDetails.gender,
+        role: response.data.roleDisplayName,
       });
     }
   }, [response, error, loading, reset]);
