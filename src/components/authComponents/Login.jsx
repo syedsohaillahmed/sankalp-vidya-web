@@ -33,10 +33,6 @@ const Login = () => {
       method: 'post',
       url: '/users/login',
       data:data2
-      // requestConfig: {
-      //   phoneNo: data.email,
-      //   password: data.password,
-      // }
   });
 
 

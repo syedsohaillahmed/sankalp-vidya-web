@@ -12,6 +12,7 @@ import { logout as logoutIcon } from "../../features/authSlice";
 import { LogoutRounded } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import {logout} from "../../features/authSlice"
+import UserMenu from "../../components/UserMenu";
 
 const Topbar = () => {
   const theme = useTheme();
@@ -55,7 +56,8 @@ const Topbar = () => {
           <SettingsOutlinedIcon />
         </IconButton>
         <IconButton >
-          <PersonOutlinedIcon />
+          {/* <PersonOutlinedIcon /> */}
+          <UserMenu />
         </IconButton>
         <IconButton onClick={handleUserMenu} >
           logout
