@@ -3,3 +3,4 @@ export const genderList = [
   { id: 2, dispalyName: "Female", name: "female" },
   { id: 3, dispalyName: "Other", name: "other" },
 ];
+

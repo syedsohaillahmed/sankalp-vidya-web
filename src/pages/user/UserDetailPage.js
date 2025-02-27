@@ -19,11 +19,14 @@ import { getUserDetailsByIdUC } from "../../api/svUrlConstructs";
 import { useForm, Controller } from "react-hook-form";
 import { genderList } from "../../store/constants";
 import moment from "moment";
+import axios from "axios";
+import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 
 const UserDetailPage = () => {
   const { id } = useParams();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const accessToken = useSelector((state) => state.data.accessToken);
+
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => {
     setIsEditing(true);
@@ -36,6 +39,42 @@ const UserDetailPage = () => {
     error: updateUsererror2,
     response: updateUserresponse2,
   } = useFetch();
+
+  const [
+    uDetailsResponse,
+    uDetailsError,
+    uDetailsIsLoading,
+    fetchUserDetails,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const getJobApplication = (id) => {
+    fetchUserDetails({
+      axiosInstance: axios,
+      method: "get",
+      url: getUserDetailsByIdUC(id),
+      // data:{1234:1234},
+      token: accessToken,
+    });
+  };
+
+  const [
+    upUDetailsResponse,
+    upUDetailsError,
+    upUDetailsIsLoading,
+    upUserDetails,
+  ] = useAxiosDataFunction();
+
+  // up job Application List
+  const upUDetails = (id, data) => {
+    upUserDetails({
+      axiosInstance: axios,
+      method: "put",
+      url: getUserDetailsByIdUC(id),
+      data:data,
+      token: accessToken,
+    });
+  };
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -54,6 +93,7 @@ const UserDetailPage = () => {
     if (id && accessToken) {
       fetchData(getUserDetailsByIdUC(id), "GET", null, accessToken);
     }
+    getJobApplication(id);
   }, [id, accessToken]);
 
   useEffect(() => {
@@ -114,7 +154,8 @@ const UserDetailPage = () => {
       email: data.email,
       dateOfBirth: data.dateOfBirth, // Include dateOfBirth in the submission
     };
-    updateUserDetails(getUserDetailsByIdUC(id), "put", updateData, accessToken);
+    upUDetails(id, updateData)
+    // updateUserDetails(getUserDetailsByIdUC(id), "put", updateData, accessToken);
     handleForCancel();
     console.log("Form Data Submitted:", updateData);
     // Handle form submission logic here
@@ -122,37 +163,46 @@ const UserDetailPage = () => {
 
   return (
     <Box m="20px">
-      <Header title="User Detail Page" />
-      {loading || updateUserloading2 && (
-        <>
-          <Box
-            spacing={2}
-            display={"flex"}
-            height={"50vh"}
-            justifyContent={"center"}
-            alignItems="center"
-          >
-            <h1>Loading....</h1>
-            <CircularProgress size={40} />
-          </Box>
-        </>
-      )}
+      <Header title="User Detail Page" subtitle={"Manage User Profile Page"} />
+      {loading ||
+        (updateUserloading2 && (
+          <>
+            <Box
+              spacing={2}
+              display={"flex"}
+              height={"50vh"}
+              justifyContent={"center"}
+              alignItems="center"
+            >
+              <h1>Loading....</h1>
+              <CircularProgress size={40} />
+            </Box>
+          </>
+        ))}
       {!loading && error && <div> Error While Fetching Data</div>}
-      {!loading && !error  && !updateUserloading2 && response && (
+      {!loading && !error && !updateUserloading2 && response && (
         <Box>
-          <Box m="20px" display={"flex"} justifySelf={"flex-end"}>
-            { !isEditing &&
-            <Button color="secondary" variant="contained" onClick={toggleEdit}>
-              Edit
-            </Button>
-          }
-          {isEditing &&
-            <Button color="secondary" variant="contained" onClick={handleForCancel}>
-              Cancel
-            </Button>
-            }
+          <Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
+            {!isEditing && (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={toggleEdit}
+              >
+                Edit
+              </Button>
+            )}
+            {isEditing && (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={handleForCancel}
+              >
+                Cancel
+              </Button>
+            )}
           </Box>
-          <Box m="20px">
+          <Box mb="20px">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Box
                 display="grid"

@@ -16,6 +16,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { useSelector } from "react-redux";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -40,6 +41,12 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
+  const fullName = useSelector((state) => state.data.user.fullName);
+  const roleName = useSelector(
+    (state) => state.data.roleDetails.roleDisplayName
+  );
+  const userId = useSelector((state) => state.data.user._id);
 
   return (
     <Box
@@ -107,10 +114,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ed Roh
+                  {fullName || ""}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {roleName || ""}
                 </Typography>
               </Box>
             </Box>
@@ -162,8 +169,8 @@ const Sidebar = () => {
               Pages
             </Typography>
             <Item
-              title="Profile Form"
-              to="/form"
+              title="Profile"
+              to={userId && `/user/${userId}`}
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
