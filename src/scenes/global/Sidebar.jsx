@@ -42,11 +42,11 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
 
-  const fullName = useSelector((state) => state.data.user.fullName);
+  const fullName = useSelector((state) => state?.data?.user?.fullName);
   const roleName = useSelector(
-    (state) => state.data.roleDetails.roleDisplayName
+    (state) => state?.data?.roleDetails?.roleDisplayName
   );
-  const userId = useSelector((state) => state.data.user._id);
+  const userId = useSelector((state) => state?.data?.user?._id);
 
   return (
     <Box

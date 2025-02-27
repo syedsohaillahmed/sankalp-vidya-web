@@ -7,7 +7,7 @@ const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const userId = useSelector((state) => state.data.user._id);
+  const userId = useSelector((state) => state?.data?.user?._id);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
