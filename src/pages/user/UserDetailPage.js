@@ -1,4 +1,15 @@
-import { Box, Button, TextField, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  useMediaQuery,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useParams } from "react-router-dom";
@@ -6,13 +17,25 @@ import { useSelector } from "react-redux";
 import useFetch from "../../hooks/useFetch";
 import { getUserDetailsByIdUC } from "../../api/svUrlConstructs";
 import { useForm, Controller } from "react-hook-form";
+import { genderList } from "../../store/constants";
+import moment from "moment";
 
 const UserDetailPage = () => {
   const { id } = useParams();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const accessToken = useSelector((state) => state.data.accessToken);
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => {
+    setIsEditing(true);
+  };
 
   const { fetchData, response, error, loading } = useFetch();
+  const {
+    fetchData: updateUserDetails,
+    loading: updateUserloading2,
+    error: updateUsererror2,
+    response: updateUserresponse2,
+  } = useFetch();
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -23,11 +46,14 @@ const UserDetailPage = () => {
       alternateContactNumber: "",
       gender: "",
       role: "",
+      dateOfBirth: "", // Add dateOfBirth field
     },
   });
 
   useEffect(() => {
-    fetchData(getUserDetailsByIdUC(id), "GET", null, accessToken);
+    if (id && accessToken) {
+      fetchData(getUserDetailsByIdUC(id), "GET", null, accessToken);
+    }
   }, [id, accessToken]);
 
   useEffect(() => {
@@ -37,32 +63,94 @@ const UserDetailPage = () => {
         userName: response.data.userDetails.userName || "",
         email: response.data.userDetails.email || "",
         contact: response.data.userDetails.phoneNo,
-        alternateContactNumber: response.data.userDetails.alternatePhoneNo || "",
+        alternateContactNumber:
+          response.data.userDetails.alternatePhoneNo || "",
         gender: response.data.userDetails.gender,
         role: response.data.roleDisplayName,
+        dateOfBirth: moment(response.data.userDetails.dateOfBirth).format(
+          "YYYY-MM-DD"
+        ),
       });
     }
   }, [response, error, loading, reset]);
 
-  const onSubmit = (data) => {
-    console.log("Form Data Submitted:", data);
-    // Handle form submission logic here
+  useEffect(() => {
+    if (updateUserresponse2?.statuscode === 201) {
+      reset({
+        fullName: updateUserresponse2.data.fullName,
+        userName: updateUserresponse2.data.userName || "",
+        email: updateUserresponse2.data.email || "",
+        contact: updateUserresponse2.data.phoneNo,
+        alternateContactNumber: updateUserresponse2.data.alternatePhoneNo || "",
+        gender: updateUserresponse2.data.gender,
+        dateOfBirth: moment(updateUserresponse2.data.dateOfBirth).format(
+          "YYYY-MM-DD"
+        ),
+      });
+    }
+  }, [updateUserresponse2]);
+
+  const handleForCancel = () => {
+    setIsEditing(false);
+    reset({
+      fullName: response.data.userDetails.fullName,
+      userName: response.data.userDetails.userName || "",
+      email: response.data.userDetails.email || "",
+      contact: response.data.userDetails.phoneNo,
+      alternateContactNumber: response.data.userDetails.alternatePhoneNo || "",
+      gender: response.data.userDetails.gender,
+      role: response.data.roleDisplayName,
+      dateOfBirth: moment(response.data.userDetails.dateOfBirth).format(
+        "YYYY-MM-DD"
+      ), //response.data.userDetails.dateOfBirth || "", // Set dateOfBirth from response
+    });
   };
 
-  const [isEditing, setIsEditing] = useState(false);
-  const toggleEdit = () => {
-    setIsEditing((prev) => !prev);
+  const onSubmit = (data) => {
+    const updateData = {
+      fullName: data.fullName,
+      alternatePhoneNo: data.alternateContactNumber,
+      gender: data.gender,
+      email: data.email,
+      dateOfBirth: data.dateOfBirth, // Include dateOfBirth in the submission
+    };
+    updateUserDetails(getUserDetailsByIdUC(id), "put", updateData, accessToken);
+    handleForCancel();
+    console.log("Form Data Submitted:", updateData);
+    // Handle form submission logic here
   };
 
   return (
     <Box m="20px">
       <Header title="User Detail Page" />
-      {loading && <h1>Loading....</h1>}
+      {loading || updateUserloading2 && (
+        <>
+          <Box
+            spacing={2}
+            display={"flex"}
+            height={"50vh"}
+            justifyContent={"center"}
+            alignItems="center"
+          >
+            <h1>Loading....</h1>
+            <CircularProgress size={40} />
+          </Box>
+        </>
+      )}
       {!loading && error && <div> Error While Fetching Data</div>}
-      {!loading && !error && response && (
+      {!loading && !error  && !updateUserloading2 && response && (
         <Box>
           <Box m="20px" display={"flex"} justifySelf={"flex-end"}>
-            <Button color="secondary" variant="contained" onClick={toggleEdit}>Edit</Button>
+            { !isEditing &&
+            <Button color="secondary" variant="contained" onClick={toggleEdit}>
+              Edit
+            </Button>
+          }
+          {isEditing &&
+            <Button color="secondary" variant="contained" onClick={handleForCancel}>
+              Cancel
+            </Button>
+            }
           </Box>
           <Box m="20px">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -104,9 +192,10 @@ const UserDetailPage = () => {
                       variant="filled"
                       type="text"
                       label="User Name"
+                      disabled={isEditing}
                       sx={{ gridColumn: "span 2" }}
                       inputProps={{
-                        readOnly: !isEditing,
+                        readOnly: true,
                       }}
                     />
                   )}
@@ -143,10 +232,11 @@ const UserDetailPage = () => {
                       type="text"
                       label="Contact Number"
                       error={!!error}
+                      disabled={isEditing}
                       helperText={error ? error.message : null}
                       sx={{ gridColumn: "span 4" }}
                       inputProps={{
-                        readOnly: !isEditing,
+                        readOnly: true,
                       }}
                     />
                   )}
@@ -173,19 +263,29 @@ const UserDetailPage = () => {
                   control={control}
                   rules={{ required: "Gender is required" }}
                   render={({ field, fieldState: { error } }) => (
-                    <TextField
-                      {...field}
+                    <FormControl
                       fullWidth
                       variant="filled"
-                      type="text"
-                      label="Gender"
-                      error={!!error}
-                      helperText={error ? error.message : null}
                       sx={{ gridColumn: "span 4" }}
-                      inputProps={{
-                        readOnly: !isEditing,
-                      }}
-                    />
+                    >
+                      <InputLabel>Gender</InputLabel>
+                      <Select
+                        {...field}
+                        error={!!error}
+                        inputProps={{
+                          readOnly: !isEditing,
+                        }}
+                      >
+                        {genderList.map((gender) => (
+                          <MenuItem key={gender.id} value={gender.name}>
+                            {gender.dispalyName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {error && (
+                        <div style={{ color: "red" }}>{error.message}</div>
+                      )}
+                    </FormControl>
                   )}
                 />
                 <Controller
@@ -198,7 +298,32 @@ const UserDetailPage = () => {
                       variant="filled"
                       type="text"
                       label="Role"
+                      disabled={isEditing}
                       sx={{ gridColumn: "span 4" }}
+                      inputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  )}
+                />
+                {/* Date of Birth Field */}
+                <Controller
+                  name="dateOfBirth"
+                  control={control}
+                  rules={{ required: "Date of Birth is required" }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="date"
+                      label="Date of Birth"
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      sx={{ gridColumn: "span 4" }}
+                      InputLabelProps={{
+                        shrink: true, // Ensure the label doesn't overlap with the value
+                      }}
                       inputProps={{
                         readOnly: !isEditing,
                       }}
@@ -206,13 +331,13 @@ const UserDetailPage = () => {
                   )}
                 />
               </Box>
-              {isEditing && 
-              <Box display="flex" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
-                  Update User
-                </Button>
-              </Box>
-              }
+              {isEditing && (
+                <Box display="flex" justifyContent="end" mt="20px">
+                  <Button type="submit" color="secondary" variant="contained">
+                    Update User
+                  </Button>
+                </Box>
+              )}
             </form>
           </Box>
         </Box>
