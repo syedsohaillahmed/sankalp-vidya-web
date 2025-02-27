@@ -93,7 +93,7 @@ const UserDetailPage = () => {
     if (id && accessToken) {
       fetchData(getUserDetailsByIdUC(id), "GET", null, accessToken);
     }
-    getJobApplication(id);
+    // getJobApplication(id);
   }, [id, accessToken]);
 
   useEffect(() => {
@@ -115,20 +115,21 @@ const UserDetailPage = () => {
   }, [response, error, loading, reset]);
 
   useEffect(() => {
-    if (updateUserresponse2?.statuscode === 201) {
+    console.log("upUDetailsResponse", upUDetailsResponse)
+    if (upUDetailsResponse?.data?.statuscode === 201) {
       reset({
-        fullName: updateUserresponse2.data.fullName,
-        userName: updateUserresponse2.data.userName || "",
-        email: updateUserresponse2.data.email || "",
-        contact: updateUserresponse2.data.phoneNo,
-        alternateContactNumber: updateUserresponse2.data.alternatePhoneNo || "",
-        gender: updateUserresponse2.data.gender,
-        dateOfBirth: moment(updateUserresponse2.data.dateOfBirth).format(
+        fullName: upUDetailsResponse.data.data.fullName,
+        userName: upUDetailsResponse.data.data.userName || "",
+        email: upUDetailsResponse.data.data.email || "",
+        contact: upUDetailsResponse.data.data.phoneNo,
+        alternateContactNumber: upUDetailsResponse.data.data.alternatePhoneNo || "",
+        gender: upUDetailsResponse.data.data.gender,
+        dateOfBirth: moment(upUDetailsResponse.data.data.dateOfBirth).format(
           "YYYY-MM-DD"
         ),
       });
     }
-  }, [updateUserresponse2]);
+  }, [upUDetailsResponse]);
 
   const handleForCancel = () => {
     setIsEditing(false);
@@ -165,7 +166,7 @@ const UserDetailPage = () => {
     <Box m="20px">
       <Header title="User Detail Page" subtitle={"Manage User Profile Page"} />
       {loading ||
-        (updateUserloading2 && (
+        (upUDetailsIsLoading && (
           <>
             <Box
               spacing={2}
@@ -180,7 +181,7 @@ const UserDetailPage = () => {
           </>
         ))}
       {!loading && error && <div> Error While Fetching Data</div>}
-      {!loading && !error && !updateUserloading2 && response && (
+      {!loading && !error && !upUDetailsIsLoading && response && (
         <Box>
           <Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
             {!isEditing && (
