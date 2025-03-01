@@ -20,6 +20,7 @@ const StudentsListing = ({
   studentsListingIsLoading,
   studentsListingError,
   studentsListingResponse,
+  clickedTableRow
 }) => {
   const [studentListData, setStudentListData] = useState([]);
 
@@ -57,7 +58,7 @@ const StudentsListing = ({
                   {studentListData.length > 0 &&
                     studentListData?.map((row, index) => {
                       return (
-                        <StyledTableRow key={row.id}>
+                        <StyledTableRow onClick={()=>clickedTableRow(row)} key={row.id}>
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>
                             {row.basicDetails.fullName || "--"}

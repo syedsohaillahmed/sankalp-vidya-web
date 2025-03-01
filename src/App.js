@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import UserDetailPage from "./pages/user/UserDetailPage";
 import UserListingPage from "./pages/user/UserListingPage";
 import Student from "./pages/students/Student";
+import StudentDetailPage from "./pages/students/StudentDetailPage";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/user/:id" element={<UserDetailPage />} />
                 <Route path="/user" element={<UserListingPage />} />
                 <Route path="/students" element={<Student />} />
+                <Route path="/students/:id" element={<StudentDetailPage />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/invoices" element={<Invoices />} />
