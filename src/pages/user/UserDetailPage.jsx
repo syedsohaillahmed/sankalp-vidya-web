@@ -21,6 +21,7 @@ import { genderList } from "../../store/constants";
 import moment from "moment";
 import axios from "axios";
 import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
+import ListLoader from "../../components/loader/ListLoader";
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -115,7 +116,6 @@ const UserDetailPage = () => {
   }, [response, error, loading, reset]);
 
   useEffect(() => {
-    console.log("upUDetailsResponse", upUDetailsResponse)
     if (upUDetailsResponse?.data?.statuscode === 201) {
       reset({
         fullName: upUDetailsResponse.data.data.fullName,
@@ -158,7 +158,6 @@ const UserDetailPage = () => {
     upUDetails(id, updateData)
     // updateUserDetails(getUserDetailsByIdUC(id), "put", updateData, accessToken);
     handleForCancel();
-    console.log("Form Data Submitted:", updateData);
     // Handle form submission logic here
   };
 
@@ -166,20 +165,9 @@ const UserDetailPage = () => {
     <Box m="20px">
       <Header title="User Detail Page" subtitle={"Manage User Profile Page"} />
       {loading ||
-        (upUDetailsIsLoading && (
-          <>
-            <Box
-              spacing={2}
-              display={"flex"}
-              height={"50vh"}
-              justifyContent={"center"}
-              alignItems="center"
-            >
-              <h1>Loading....</h1>
-              <CircularProgress size={40} />
-            </Box>
-          </>
-        ))}
+        upUDetailsIsLoading && (
+          <ListLoader />
+        )}
       {!loading && error && <div> Error While Fetching Data</div>}
       {!loading && !error && !upUDetailsIsLoading && response && (
         <Box>

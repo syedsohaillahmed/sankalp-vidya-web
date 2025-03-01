@@ -4,10 +4,7 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
@@ -15,16 +12,14 @@ import { useSelector } from "react-redux";
 import { getUserListdUC } from "../../api/svUrlConstructs";
 import axios from "axios";
 import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
-import CustomTable from "../../SamplePages/CustomTable";
-import GeminiTable from "../../SamplePages/GeminiTable";
-import DeepseekTable, {
-  mockData,
+import {
   StyledTableCell,
   StyledTableContainer,
   StyledTableHead,
   StyledTableRow,
 } from "../../SamplePages/DeepseekTable";
 import { formatDate } from "../../utils/util";
+import ListLoader from "../../components/loader/ListLoader";
 
 const UserListingPage = () => {
   const accessToken = useSelector((state) => state.data.accessToken);
@@ -54,20 +49,20 @@ const UserListingPage = () => {
 
   useEffect(() => {
     if (userListingResponse?.data?.statuscode === 200) {
-      console.log(userListingResponse);
       setUserListData(userListingResponse?.data?.data?.docs);
     }
   }, [userListingResponse]);
-  console.log(userListData);
-  const headers = ["Name", "Age", "Email"];
 
   return (
     <Box m="20px">
       <Header title="Users " subtitle={"Manage Users List"} />
+      {
+        userListingIsLoading && <ListLoader />
+      }
       {userListData.length > 0 && (
         <Box >
           {/* <DeepseekTable /> */}
-          <Box sx={{ padding: "2rem" }}>
+          <Box sx={{ paddingBottom: "2rem" }}>
             <StyledTableContainer component={Paper}>
               <Table>
                 <StyledTableHead>
