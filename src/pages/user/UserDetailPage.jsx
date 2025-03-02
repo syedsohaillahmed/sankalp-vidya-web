@@ -22,6 +22,7 @@ import moment from "moment";
 import axios from "axios";
 import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 import ListLoader from "../../components/loader/ListLoader";
+import MainCard from "../../components/cards/MainCard";
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -86,7 +87,7 @@ const UserDetailPage = () => {
       alternateContactNumber: "",
       gender: "",
       role: "",
-      dateOfBirth: "", // Add dateOfBirth field
+      dateOfBirth: "", 
     },
   });
 
@@ -164,14 +165,13 @@ const UserDetailPage = () => {
   return (
     <Box m="20px">
       <Header title="User Detail Page" subtitle={"Manage User Profile Page"} />
-      {loading ||
-        upUDetailsIsLoading && (
-          <ListLoader />
-        )}
+      {(loading || upUDetailsIsLoading) && <ListLoader />}
+
       {!loading && error && <div> Error While Fetching Data</div>}
       {!loading && !error && !upUDetailsIsLoading && response && (
         <Box>
-          <Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
+          
+          <MainCard title="Profile"  secondary={<Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
             {!isEditing && (
               <Button
                 color="secondary"
@@ -190,7 +190,7 @@ const UserDetailPage = () => {
                 Cancel
               </Button>
             )}
-          </Box>
+          </Box>}>
           <Box mb="20px">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Box
@@ -379,6 +379,7 @@ const UserDetailPage = () => {
               )}
             </form>
           </Box>
+          </MainCard>
         </Box>
       )}
     </Box>

@@ -14,3 +14,7 @@ export const getUserListdUC = () => {
 export const getStudentsListUC = ()=>{
     return `${baseUrl}/users/student`
 }
+
+export const getStudentsDetailsUC = (studentId)=>{
+  return `${baseUrl}/users/student/${studentId}`
+}
