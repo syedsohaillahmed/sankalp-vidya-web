@@ -29,8 +29,12 @@ const StudentDetailPage = () => {
 
   const accessToken = useSelector((state) => state.data.accessToken);
   const [isEditingBasicInfo, setIsEditingBasicInfo] = useState(false);
+  const [isEditingDetailedInfo, setIseEditingDetailedInfo] = useState(false)
   const toggleEdit = () => {
     setIsEditingBasicInfo(true);
+  };
+  const toggleEditDetailednfo = () => {
+    setIseEditingDetailedInfo(true);
   };
   const [
     studentDetailsResponse,
@@ -131,6 +135,10 @@ const StudentDetailPage = () => {
   const handleForCancel = () => {
     setIsEditingBasicInfo(false);
     handleResetValues(studentDetailsResponse?.data?.data?.userDetail);
+  };
+
+  const handleDIFormCancel = () => {
+    setIseEditingDetailedInfo(false);
   };
 
   useEffect(() => {
@@ -355,7 +363,7 @@ const StudentDetailPage = () => {
             {isEditingBasicInfo && (
               <Box display="flex" justifyContent="end" mt="20px">
                 <Button type="submit" color="secondary" variant="contained">
-                  Update User
+                  Update
                 </Button>
               </Box>
             )}
@@ -363,8 +371,180 @@ const StudentDetailPage = () => {
         </Box>
       </MainCard>
       <Box mt={"1.5rem"}>
-        <MainCard title="Detailed Info" secondary={<Button>cjrc</Button>}>
-          id: {id}
+        <MainCard title="Detailed Info" secondary={
+          <Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
+            {!isEditingDetailedInfo && (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={toggleEditDetailednfo}
+              >
+                Edit
+              </Button>
+            )}
+            {isEditingDetailedInfo && (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={handleDIFormCancel}
+              >
+                Cancel
+              </Button>
+            )}
+          </Box>}>
+          <Box mb="20px">
+            <form onSubmit={handleSubmit(handleBasicDetailsSubmit)}>
+              <Box
+                display="grid"
+                gap="30px"
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                sx={{
+                  "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                }}
+              >
+                <Controller
+                  name="Student ID"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="School"
+                      disabled={isEditingDetailedInfo}
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="classGrade"
+                  control={control}
+                  rules={{ required: "Full Name is required" }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="Class Grade"
+                      error={!!error}
+                      disabled={isEditingDetailedInfo}
+                      helperText={error ? error.message : null}
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingDetailedInfo,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="academicYear"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="Academic Year"
+                      disabled={isEditingBasicInfo}
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="fatherName"
+                  control={control}
+                  rules={{ required: "Email is required" }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="Father Name"
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="motherName"
+                  control={control}
+                  rules={{ required: "Contact Number is required" }}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="Mother Name"
+                      error={!!error}
+                      disabled={isEditingBasicInfo}
+                      helperText={error ? error.message : null}
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="caste"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="Caste"
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="school"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="School"
+                      sx={{ gridColumn: "span 1" }}
+                      inputProps={{
+                        readOnly: !isEditingBasicInfo,
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              {isEditingDetailedInfo && (
+                <Box display="flex" justifyContent="end" mt="20px">
+                  <Button type="submit" color="secondary" variant="contained">
+                    Update
+                  </Button>
+                </Box>
+              )}
+            </form>
+          </Box>
         </MainCard>
       </Box>
     </Box>

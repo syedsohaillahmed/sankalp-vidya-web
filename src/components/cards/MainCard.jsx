@@ -31,7 +31,6 @@ const MainCard = forwardRef(
   ) => {
     const theme = useTheme();
       const colors = tokens(theme.palette.mode);
-          console.log("palette", theme.palette)
 
     return (
       <Box

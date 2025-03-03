@@ -5,6 +5,9 @@ import { getStudentsListUC } from "../../../api/svUrlConstructs";
 import StudentsListing from "../StudentsListing";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PopoverForm from "../../../SamplePages/PopoverForm";
+import CreateStudentForm from "../forms/CreateStudentForm";
+import { Box } from "@mui/material";
 
 const Class9Students = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -36,12 +39,20 @@ const Class9Students = () => {
   };
 
   return (
+    <>
+    <Box justifySelf={"flex-end"}>
+    <CreateStudentForm />
+
+
+    </Box>
+    <PopoverForm />
     <StudentsListing
       clickedTableRow={clickedTableRow}
       studentsListingIsLoading={studentsListingIsLoading}
       studentsListingError={studentsListingError}
       studentsListingResponse={studentsListingResponse}
     />
+    </>
   );
 };
 
