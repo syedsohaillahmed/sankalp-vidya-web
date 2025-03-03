@@ -255,6 +255,22 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
           </Box>
+
+          <Typography
+            variant="h6"
+            color={colors.grey[300]}
+            sx={{ m: "15px 0 5px 20px" }}
+          >
+            Sample pages
+          </Typography>
+
+          <Item
+            title="Chapters"
+            to="/chapters"
+            icon={<BarChartOutlinedIcon />}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </Menu>
       </ProSidebar>
     </Box>

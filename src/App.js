@@ -24,6 +24,7 @@ import UserDetailPage from "./pages/user/UserDetailPage";
 import UserListingPage from "./pages/user/UserListingPage";
 import Student from "./pages/students/Student";
 import StudentDetailPage from "./pages/students/StudentDetailPage";
+import VideoPage from "./SamplePages/VideoPage";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -76,6 +77,7 @@ function App() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/geography" element={<Geography />} />
+                <Route path="/chapters" element={<VideoPage />} />
               </Route>
             </Route>
 
