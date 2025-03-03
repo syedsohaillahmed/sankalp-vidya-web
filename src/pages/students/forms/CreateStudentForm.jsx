@@ -33,6 +33,7 @@ const CreateStudentForm = () => {
       avatar: "",
       gender: "",
       studentId: "",
+      class:"",
       academicYear: "",
     },
   });
@@ -51,6 +52,7 @@ const CreateStudentForm = () => {
         dateOfBirth: data.dateOfBirth,
         userPassword: data.userPassword,
         gender: data.gender,
+        classId:data.class,
         studentId: data.studentId,
         academicYear: data.academicYear
 
@@ -66,7 +68,13 @@ const CreateStudentForm = () => {
     academicYearError,
     academicYearIsLoading,
     getAcademicYear,
+    classResponse,
+      classIsLoading,
+      classError,
+      getClass,
   } = useContext(StudentContext);
+
+  console.log("classresponse", classResponse)
 
   if (academicYearIsLoading) return <div>Loading...</div>;
   if (academicYearError) return <div>Error: {academicYearError.message}</div>;
@@ -170,7 +178,7 @@ const CreateStudentForm = () => {
               </Grid>
 
               {/* Avatar (URL) */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <Controller
                   name="avatar"
                   control={control}
@@ -184,6 +192,32 @@ const CreateStudentForm = () => {
                       helperText={errors.avatar?.message}
                       margin="dense"
                     />
+                  )}
+                />
+              </Grid> */}
+
+<Grid item xs={6}>
+                <Controller
+                  name="class"
+                  control={control}
+                  rules={{ required: "Class Selection is required" }}
+                  render={({ field }) => (
+                    <FormControl fullWidth margin="dense">
+                      <InputLabel>Class</InputLabel>
+                      <Select
+                        {...field}
+                        label="Class"
+                        error={!!errors.academicYear}
+                      >
+                        {classResponse?.data?.data?.map(
+                          (classres) => (
+                            <MenuItem value={classres._id}>
+                              {classres.name}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    </FormControl>
                   )}
                 />
               </Grid>
@@ -247,9 +281,6 @@ const CreateStudentForm = () => {
                             </MenuItem>
                           )
                         )}
-
-                        {/* <MenuItem value="2024">2024</MenuItem>
-                        <MenuItem value="2025">2025</MenuItem> */}
                       </Select>
                     </FormControl>
                   )}

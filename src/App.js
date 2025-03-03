@@ -92,5 +92,3 @@ function App() {
 
 export default App;
 
-//date,sid,sname,classgrade,subject,topic,logintime,
-//
