@@ -18,3 +18,9 @@ export const getStudentsListUC = ()=>{
 export const getStudentsDetailsUC = (studentId)=>{
   return `${baseUrl}/users/student/${studentId}`
 }
+
+//genral
+export const getAcademicyearUC = (studentId)=>{
+  return `${baseUrl}/academic/academicYearbatch`
+}
+

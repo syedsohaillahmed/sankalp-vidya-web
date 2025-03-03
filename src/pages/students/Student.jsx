@@ -5,6 +5,13 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import StudentsListing from './StudentsListing';
 import Class9Students from './class/Class9Students';
+import { getAcademicyearUC, getStudentsListUC } from '../../api/svUrlConstructs';
+import { useEffect } from 'react';
+import axios from 'axios';
+import useAxiosDataFunction from '../../hooks/useAxiosDataFunction';
+import { useSelector } from 'react-redux';
+import { createContext } from 'react';
+import { useMemo } from 'react';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -35,15 +42,79 @@ function CustomTabPanel(props) {
     };
   }
   
+  
+  export const StudentContext = createContext();
 
 const Student = () => {
     const [value, setValue] = React.useState(0);
 
+   
+    
+
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+    const accessToken = useSelector((state) => state?.data?.accessToken);
+    const [
+      academicYearResponse,
+      academicYearError,
+      academicYearIsLoading,
+      fetchacAdemicYear,
+    ] = useAxiosDataFunction();
+  
+    // fetch job Application List
+    const getAcademicYear = () => {
+      fetchacAdemicYear({
+        axiosInstance: axios,
+        method: "get",
+        url: getAcademicyearUC(),
+        token: accessToken,
+      });
+    };
+  
+    useEffect(() => {
+      getAcademicYear();
+    }, []);
+
+    
+
+
+    const [
+      createStudentResponse,
+      createStudentError,
+      createStudentIsLoading,
+      createStudent,
+    ] = useAxiosDataFunction();
+  
+    // fetch job Application List
+    const registerStudent = (data) => {
+      createStudent({
+        axiosInstance: axios,
+        method: "post",
+        url: getStudentsListUC(),
+        data:data,
+        token: accessToken,
+      });
+    };
+  
+    const contextValue = useMemo(
+      () => ({
+        academicYearResponse,
+        academicYearError,
+        academicYearIsLoading,
+        getAcademicYear,
+        registerStudent
+      }),
+      [academicYearResponse, academicYearError, academicYearIsLoading]
+    );
+
+    console.log("resonseofpost", createStudentResponse,
+      createStudentError,
+      createStudentIsLoading,)
+   
   
     return (
+      <StudentContext.Provider value={contextValue}>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -62,6 +133,8 @@ const Student = () => {
           Item Three
         </CustomTabPanel>
       </Box>
+
+      </StudentContext.Provider>
     );
 }
 

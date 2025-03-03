@@ -5,13 +5,13 @@ import { getStudentsListUC } from "../../../api/svUrlConstructs";
 import StudentsListing from "../StudentsListing";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PopoverForm from "../../../SamplePages/PopoverForm";
-import CreateStudentForm from "../forms/CreateStudentForm";
+import Header from "../../../components/Header";
 import { Box } from "@mui/material";
+import CreateStudentForm from "../forms/CreateStudentForm";
 
 const Class9Students = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [
     studentsListingResponse,
     studentsListingError,
@@ -35,23 +35,23 @@ const Class9Students = () => {
 
   const clickedTableRow = (row) => {
     console.log("row clicked:", row);
-    navigate(`/students/${row._id}`)
+    navigate(`/students/${row._id}`);
   };
 
   return (
     <>
-    <Box justifySelf={"flex-end"}>
-    <CreateStudentForm />
-
-
-    </Box>
-    <PopoverForm />
-    <StudentsListing
-      clickedTableRow={clickedTableRow}
-      studentsListingIsLoading={studentsListingIsLoading}
-      studentsListingError={studentsListingError}
-      studentsListingResponse={studentsListingResponse}
-    />
+      <Box m="20px">
+        <Header title="Students List " subtitle={"Manage Students List"} />
+        <Box sx={{ paddingBottom: "2rem" }} justifySelf={"flex-end"}>
+          <CreateStudentForm />
+        </Box>
+        <StudentsListing
+          clickedTableRow={clickedTableRow}
+          studentsListingIsLoading={studentsListingIsLoading}
+          studentsListingError={studentsListingError}
+          studentsListingResponse={studentsListingResponse}
+        />
+      </Box>
     </>
   );
 };

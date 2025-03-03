@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-const FormPopover = ({ header, buttonName, children }) => {
+const FormPopover = ({ header,  buttonName, children }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -37,7 +37,7 @@ const FormPopover = ({ header, buttonName, children }) => {
             {header}
           </Typography>
           <Divider sx={{ mb: 2 }} />
-          {children}
+          {children(handleClose)} 
         </Box>
       </Popover>
     </Box>

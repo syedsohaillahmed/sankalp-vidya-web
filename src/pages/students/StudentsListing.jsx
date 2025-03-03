@@ -16,11 +16,12 @@ import {
   StyledTableRow,
 } from "../../SamplePages/DeepseekTable";
 import { formatDate } from "../../utils/util";
+import CreateStudentForm from "./forms/CreateStudentForm";
 const StudentsListing = ({
   studentsListingIsLoading,
   studentsListingError,
   studentsListingResponse,
-  clickedTableRow
+  clickedTableRow,
 }) => {
   const [studentListData, setStudentListData] = useState([]);
 
@@ -31,8 +32,7 @@ const StudentsListing = ({
   }, [studentsListingResponse]);
 
   return (
-    <Box m="20px">
-      <Header title="Students List " subtitle={"Manage Students List"} />
+    <>
       {studentsListingIsLoading && <ListLoader />}
       {!studentsListingIsLoading && studentsListingError && (
         <div> Error occured</div>
@@ -58,7 +58,10 @@ const StudentsListing = ({
                   {studentListData.length > 0 &&
                     studentListData?.map((row, index) => {
                       return (
-                        <StyledTableRow onClick={()=>clickedTableRow(row)} key={row.id}>
+                        <StyledTableRow
+                          onClick={() => clickedTableRow(row)}
+                          key={row.id}
+                        >
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>
                             {row.basicDetails.fullName || "--"}
@@ -87,7 +90,7 @@ const StudentsListing = ({
             </StyledTableContainer>
           </Box>
         )}
-    </Box>
+    </>
   );
 };
 
