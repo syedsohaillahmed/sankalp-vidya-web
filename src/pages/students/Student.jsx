@@ -16,6 +16,7 @@ import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 import { useSelector } from "react-redux";
 import { createContext } from "react";
 import { useMemo } from "react";
+import Header from "../../components/Header";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -133,6 +134,8 @@ const Student = () => {
 
   return (
     <StudentContext.Provider value={contextValue}>
+      <Box m="20px">
+      <Header title="Students List " subtitle={"Manage Students List"} />
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
@@ -154,6 +157,7 @@ const Student = () => {
         <CustomTabPanel value={value} index={2}>
           Item Three
         </CustomTabPanel>
+      </Box>
       </Box>
     </StudentContext.Provider>
   );

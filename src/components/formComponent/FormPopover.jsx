@@ -19,7 +19,7 @@ const FormPopover = ({ header,  buttonName, children }) => {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <Box textAlign="center" mt={1}>
+    <Box textAlign="center" mt={0.5}>
       <Button variant="contained" onClick={handleOpen}>
         {buttonName}
       </Button>

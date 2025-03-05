@@ -40,18 +40,15 @@ const Class9Students = () => {
 
   return (
     <>
-      <Box m="20px">
-        <Header title="Students List " subtitle={"Manage Students List"} />
-        <Box sx={{ paddingBottom: "2rem" }} justifySelf={"flex-end"}>
-          <CreateStudentForm />
-        </Box>
-        <StudentsListing
-          clickedTableRow={clickedTableRow}
-          studentsListingIsLoading={studentsListingIsLoading}
-          studentsListingError={studentsListingError}
-          studentsListingResponse={studentsListingResponse}
-        />
+      <Box sx={{ paddingBottom: "2rem" }} justifySelf={"flex-end"}>
+        <CreateStudentForm />
       </Box>
+      <StudentsListing
+        clickedTableRow={clickedTableRow}
+        studentsListingIsLoading={studentsListingIsLoading}
+        studentsListingError={studentsListingError}
+        studentsListingResponse={studentsListingResponse}
+      />
     </>
   );
 };
