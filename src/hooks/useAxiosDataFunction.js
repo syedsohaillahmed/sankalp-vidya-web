@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const useDataUpdateFunction = () => {
+const useAxiosDataFunction = () => {
   const [response, setResponse] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); //different!
@@ -36,4 +36,4 @@ const useDataUpdateFunction = () => {
   return [response, error, loading, axiosPost];
 };
 
-export default useDataUpdateFunction;
+export default useAxiosDataFunction;

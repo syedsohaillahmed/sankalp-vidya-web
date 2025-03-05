@@ -19,6 +19,11 @@ export const getStudentsDetailsUC = (studentId)=>{
   return `${baseUrl}/users/student/${studentId}`
 }
 
+//chapter
+export const getAllChapterUC = (studentId)=>{
+  return `${baseUrl}/academic/chapter`
+}
+
 //genral
 export const getAcademicyearUC = ()=>{
   return `${baseUrl}/academic/academicYearbatch`
@@ -27,5 +32,10 @@ export const getAcademicyearUC = ()=>{
 export const getClassUC = ()=>{
   return `${baseUrl}/academic/class`
 }
+
+export const getSubjectUC = ()=>{
+  return `${baseUrl}/academic/subject`
+}
+
 
 

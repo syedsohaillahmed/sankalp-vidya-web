@@ -18,13 +18,14 @@ import Calendar from "./scenes/calendar/calendar";
 import Login from "./components/authComponents/Login";
 import Home from "./components/authComponents/Home";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
-import { useAuth } from "./auth/AuthContext";
 import { useSelector } from "react-redux";
 import UserDetailPage from "./pages/user/UserDetailPage";
 import UserListingPage from "./pages/user/UserListingPage";
 import Student from "./pages/students/Student";
 import StudentDetailPage from "./pages/students/StudentDetailPage";
 import VideoPage from "./SamplePages/VideoPage";
+import AdminChapterTab from "./pages/academic/admin/chapter/listing/AdminChapterTab";
+import AdminChapterDetailPage from "./pages/academic/admin/chapter/detailPage/AdminChapterDetailPage";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -78,6 +79,8 @@ function App() {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/geography" element={<Geography />} />
                 <Route path="/chapters" element={<VideoPage />} />
+                <Route path="/admin/chapters" element={<AdminChapterTab />} />
+                <Route path="/admin/chapters/:id" element={<AdminChapterDetailPage />} />
               </Route>
             </Route>
 
