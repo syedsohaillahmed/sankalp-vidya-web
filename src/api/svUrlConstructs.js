@@ -20,9 +20,22 @@ export const getStudentsDetailsUC = (studentId)=>{
 }
 
 //chapter
-export const getAllChapterUC = (studentId)=>{
+export const getAllChapterUC = ()=>{
   return `${baseUrl}/academic/chapter`
 }
+
+export const getChapterDetailsUC = (chapterId)=>{
+  return `${baseUrl}/academic/chapter/${chapterId}`
+}
+
+export const uploadVideoLinkUC = (chapterId)=>{
+  return `${baseUrl}/academic/chapter/${chapterId}/videoUrl`
+}
+
+
+
+
+
 
 //genral
 export const getAcademicyearUC = ()=>{
