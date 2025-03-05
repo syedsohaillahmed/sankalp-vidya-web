@@ -11,6 +11,12 @@ import {
   Avatar,
   Link,
   Grid,
+  Table,
+  TableContainer,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableBody,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import Header from "../components/Header";
@@ -52,9 +58,9 @@ const mockChapter = {
     },
   ],
   videos: {
-    videoEmbededLink: "https://youtu.be/StEXgrCbxJo?si=OMe_SGfq_BZRKmNS",
+    videoEmbededLink: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     title: "Introduction to Algebra",
-    videoUrl: "https://youtu.be/StEXgrCbxJo?si=OMe_SGfq_BZRKmNS",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     description: "This video explains the basics of algebra.",
     videoSource: "YouTube",
     author: "John Doe",
@@ -87,34 +93,70 @@ const DetailPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <MainCard title={"Basic Details"}>
-            <Typography variant="body1">
-              <strong>Name:</strong> {mockChapter.name}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Description:</strong> {mockChapter.description}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Subject:</strong> {mockChapter.subject.displayName} (
-              {mockChapter.subject.board})
-            </Typography>
-            <Typography variant="body1">
-              <strong>Class:</strong> {mockChapter.class.name} (Grade{" "}
-              {mockChapter.class.classGrade})
-            </Typography>
-            <Typography variant="body1">
-              <strong>Academic Year:</strong>{" "}
-              {mockChapter.academicYear.displayName} (
-              {mockChapter.academicYear.batchName})
-            </Typography>
-            <Typography variant="body1">
-              <strong>Published Date:</strong>{" "}
-              {new Date(mockChapter.publishedDate).toLocaleDateString()}
-            </Typography>
-            <Chip
-              label={mockChapter.active ? "Active" : "Inactive"}
-              color={mockChapter.active ? "success" : "error"}
-              sx={{ mt: 2 }}
-            />
+            <Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Name:
+                </Typography>
+                <Typography variant="body1">{mockChapter.name}</Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Description:
+                </Typography>
+                <Typography variant="body1">
+                  {mockChapter.description}
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Subject:
+                </Typography>
+                <Typography variant="body1">
+                  {mockChapter.subject.displayName} ({mockChapter.subject.board}
+                  )
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Class:
+                </Typography>
+                <Typography variant="body1">
+                  {mockChapter.class.name} (Grade {mockChapter.class.classGrade}
+                  )
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Academic Year:
+                </Typography>
+                <Typography variant="body1">
+                  {mockChapter.academicYear.displayName} (
+                  {mockChapter.academicYear.batchName})
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="body1" fontWeight="bold">
+                  Published Date:
+                </Typography>
+                <Typography variant="body1">
+                  {new Date(mockChapter.publishedDate).toLocaleDateString()}
+                </Typography>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  Status:
+                </Typography>
+                <Chip
+                  label={mockChapter.active ? "Active" : "Inactive"}
+                  color={mockChapter.active ? "success" : "error"}
+                />
+              </Box>
+            </Box>
           </MainCard>
         </Grid>
         <Grid item xs={6}>
@@ -185,7 +227,7 @@ const DetailPage = () => {
               <iframe
                 width="100%"
                 height="400"
-                src={mockChapter.videos.videoEmbededLink}
+                src={mockChapter.videos.videoUrl}
                 title={mockChapter.videos.title}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

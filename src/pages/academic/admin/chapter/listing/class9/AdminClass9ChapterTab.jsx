@@ -3,20 +3,20 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import AdminAllChapters from "./AdminAllChapters";
 import {
   getAcademicyearUC,
   getAllChapterUC,
   getClassUC,
   getSubjectUC,
-} from "../../../../../api/svUrlConstructs";
-import useAxiosDataFunction from "../../../../../hooks/useAxiosDataFunction";
+} from "../../../../../../api/svUrlConstructs";
+import useAxiosDataFunction from "../../../../../../hooks/useAxiosDataFunction";
 import { useMemo } from "react";
 import { createContext } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useEffect } from "react";
-import Header from "../../../../../components/Header";
+import Header from "../../../../../../components/Header";
+import AdminClass9AllChapters from "./AdminClass9AllChapters";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,7 +49,7 @@ function a11yProps(index) {
 
 export const ChpterContext = createContext();
 
-const AdminChapterTab = () => {
+const AdminClass9ChapterTab = () => {
   const [value, setValue] = React.useState(0);
   const accessToken = useSelector((state) => state?.data?.accessToken);
 
@@ -136,6 +136,9 @@ const AdminChapterTab = () => {
       getSubject,
 
       postChapter,
+      createchapterResponse,
+      createchapterError,
+      createchapterIsLoading,
     }),
     [
       academicYearResponse,
@@ -147,6 +150,9 @@ const AdminChapterTab = () => {
       classResponse,
       classError,
       classIsLoading,
+      createchapterResponse,
+      createchapterError,
+      createchapterIsLoading,
     ]
   );
 
@@ -158,35 +164,34 @@ const AdminChapterTab = () => {
 
   return (
     <ChpterContext.Provider value={contextValue}>
-      
-    <Box m="20px">
-      <Header title="Chapter List " subtitle={"Manage Chapter List"} />
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-            sx={{padding:0, m:0}}
-          >
-            <Tab label="All Chapters" {...a11yProps(0)} />
-            <Tab label="Class 9" {...a11yProps(1)} />
-            <Tab label="Class 10" {...a11yProps(2)} />
-          </Tabs>
+      <Box m="20px">
+        <Header title="Chapter List " subtitle={"Manage Chapter List"} />
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+              sx={{ padding: 0, m: 0 }}
+            >
+              <Tab label="All Chapters" {...a11yProps(0)} />
+              <Tab label="Mathematics" {...a11yProps(1)} />
+              <Tab label="Science" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel sx={{ padding: 0, m: 0 }} value={value} index={0}>
+            <AdminClass9AllChapters />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            Item Two
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            Item Three
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel sx={{padding:0, m:0}} value={value} index={0}>
-          <AdminAllChapters />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          Item Two
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          Item Three
-        </CustomTabPanel>
-      </Box>
       </Box>
     </ChpterContext.Provider>
   );
 };
 
-export default AdminChapterTab;
+export default AdminClass9ChapterTab;

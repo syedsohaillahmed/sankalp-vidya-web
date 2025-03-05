@@ -277,11 +277,11 @@ const Sidebar = () => {
             color={colors.grey[300]}
             sx={{ m: "15px 0 5px 20px" }}
           >
-            Admin pages
+            Admin Chapters Page
           </Typography>
 
           <Item
-            title="Chapters-List"
+            title="Class 9"
             to="/admin/chapters"
             icon={<BarChartOutlinedIcon />}
             selected={selected}

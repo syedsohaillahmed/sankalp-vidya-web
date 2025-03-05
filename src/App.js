@@ -24,8 +24,8 @@ import UserListingPage from "./pages/user/UserListingPage";
 import Student from "./pages/students/Student";
 import StudentDetailPage from "./pages/students/StudentDetailPage";
 import VideoPage from "./SamplePages/VideoPage";
-import AdminChapterTab from "./pages/academic/admin/chapter/listing/AdminChapterTab";
 import AdminChapterDetailPage from "./pages/academic/admin/chapter/detailPage/AdminChapterDetailPage";
+import AdminClass9ChapterTab from "./pages/academic/admin/chapter/listing/class9/AdminClass9ChapterTab";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -79,7 +79,7 @@ function App() {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/geography" element={<Geography />} />
                 <Route path="/chapters" element={<VideoPage />} />
-                <Route path="/admin/chapters" element={<AdminChapterTab />} />
+                <Route path="/admin/chapters" element={<AdminClass9ChapterTab />} />
                 <Route path="/admin/chapters/:id" element={<AdminChapterDetailPage />} />
               </Route>
             </Route>

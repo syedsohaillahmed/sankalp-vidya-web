@@ -1,68 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getAllChapterUC } from "../../../../../api/svUrlConstructs";
-import useAxiosDataFunction from "../../../../../hooks/useAxiosDataFunction";
-import axios from "axios";
-import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@mui/material";
-import {
-  StyledTableCell,
-  StyledTableContainer,
-  StyledTableHead,
-  StyledTableRow,
-} from "../../../../../SamplePages/DeepseekTable";
+import { Box, Paper, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import React from "react";
+import { StyledTableCell, StyledTableContainer, StyledTableHead, StyledTableRow } from "../../../../../SamplePages/DeepseekTable";
 import ListLoader from "../../../../../components/loader/ListLoader";
-import CreateChapter from "../forms/CreateChapter";
-import { useNavigate } from "react-router-dom";
 
-const AdminAllChapters = () => {
-  const accessToken = useSelector((state) => state?.data?.accessToken);
-  const [chapterData, setChapterData] = useState([]);
-  const [
-    allChapterResponse,
-    allChapterError,
-    allChapterIsLoading,
-    fetchAllChapter,
-  ] = useAxiosDataFunction();
-
-  // fetch job Application List
-  const getAllChapter = () => {
-    fetchAllChapter({
-      axiosInstance: axios,
-      method: "get",
-      url: getAllChapterUC(),
-      token: accessToken,
-    });
-  };
-
-  useEffect(() => {
-    getAllChapter();
-  }, []);
-
-  useEffect(() => {
-    if (allChapterResponse?.data?.statuscode === 200) {
-      console.log("coming inside", allChapterResponse?.data?.data);
-      setChapterData(allChapterResponse?.data?.data);
-    }
-  }, [allChapterResponse]);
-
-  const navigate = useNavigate();
-
-  const handleChapterRowClick = (row) => {
-    navigate(`/admin/chapters/${row.id}`);
-  };
-
+const ChapterTable = ({allChapterIsLoading, allChapterError, chapterData=[], handleChapterRowClick}) => {
   return (
     <>
-      <Box sx={{ paddingBottom: "2rem" }} justifySelf={"flex-end"}>
-        <CreateChapter />
-      </Box>
       <Box>
         {allChapterIsLoading && <ListLoader />}
         {!allChapterIsLoading && allChapterError && <div> Error occured</div>}
@@ -111,4 +54,4 @@ const AdminAllChapters = () => {
   );
 };
 
-export default AdminAllChapters;
+export default ChapterTable;
