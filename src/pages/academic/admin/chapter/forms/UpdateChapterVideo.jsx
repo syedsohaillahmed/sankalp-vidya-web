@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useContext } from "react";
 import { ChpterContext } from "../listing/class9/AdminClass9ChapterTab";
-const UpdateChapterVideo = ({chapterId, putVideoData, videoDetails }) => {
+const UpdateChapterVideo = ({ chapterId, putVideoData, videoDetails }) => {
   const {
     control,
     handleSubmit,
@@ -30,9 +30,6 @@ const UpdateChapterVideo = ({chapterId, putVideoData, videoDetails }) => {
       videoAuthor: "",
     },
   });
-
-
-   
 
   useEffect(() => {
     reset({
@@ -51,7 +48,6 @@ const UpdateChapterVideo = ({chapterId, putVideoData, videoDetails }) => {
   };
 
   const onSubmit = (data, closePopover) => {
-    console.log("Form Data:", data);
     const videoObj = {
       title: data.name,
       description: data.description,

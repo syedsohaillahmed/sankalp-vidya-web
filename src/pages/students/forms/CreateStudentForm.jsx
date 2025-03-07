@@ -17,7 +17,7 @@ import { useContext } from "react";
 
 const CreateStudentForm = () => {
   const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screen
-  const { registerStudent } = useContext(StudentContext)
+  const { registerStudent } = useContext(StudentContext);
 
   const {
     control,
@@ -33,7 +33,7 @@ const CreateStudentForm = () => {
       avatar: "",
       gender: "",
       studentId: "",
-      class:"",
+      class: "",
       academicYear: "",
     },
   });
@@ -45,18 +45,17 @@ const CreateStudentForm = () => {
 
   const onSubmit = (data, closePopover) => {
     const studentObj = {
-        roleId: "67aa0f6ddcf922f24c9de891",
-        fullName: data.fullName,
-        phoneNo: data.phoneNo,
-        dateOfBirth: data.dateOfBirth,
-        userPassword: data.userPassword,
-        gender: data.gender,
-        classId:data.class,
-        studentId: data.studentId,
-        academicYear: data.academicYear
-
-    }
-    registerStudent(studentObj)
+      roleId: "67aa0f6ddcf922f24c9de891",
+      fullName: data.fullName,
+      phoneNo: data.phoneNo,
+      dateOfBirth: data.dateOfBirth,
+      userPassword: data.userPassword,
+      gender: data.gender,
+      classId: data.class,
+      studentId: data.studentId,
+      academicYear: data.academicYear,
+    };
+    registerStudent(studentObj);
     reset();
     closePopover(); // Close the popover
   };
@@ -67,11 +66,10 @@ const CreateStudentForm = () => {
     academicYearIsLoading,
     getAcademicYear,
     classResponse,
-      classIsLoading,
-      classError,
-      getClass,
+    classIsLoading,
+    classError,
+    getClass,
   } = useContext(StudentContext);
-
 
   if (academicYearIsLoading) return <div>Loading...</div>;
   if (academicYearError) return <div>Error: {academicYearError.message}</div>;
@@ -193,7 +191,7 @@ const CreateStudentForm = () => {
                 />
               </Grid> */}
 
-<Grid item xs={6}>
+              <Grid item xs={6}>
                 <Controller
                   name="class"
                   control={control}
@@ -206,13 +204,11 @@ const CreateStudentForm = () => {
                         label="Class"
                         error={!!errors.academicYear}
                       >
-                        {classResponse?.data?.data?.map(
-                          (classres) => (
-                            <MenuItem value={classres._id}>
-                              {classres.name}
-                            </MenuItem>
-                          )
-                        )}
+                        {classResponse?.data?.data?.map((classres) => (
+                          <MenuItem value={classres._id}>
+                            {classres.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   )}

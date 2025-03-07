@@ -23,7 +23,10 @@ import MainCard from "../../../../../components/cards/MainCard";
 import { styled } from "@mui/system";
 import UpdateChapterVideo from "../forms/UpdateChapterVideo";
 import { useParams } from "react-router-dom";
-import { getChapterDetailsUC, uploadVideoLinkUC } from "../../../../../api/svUrlConstructs";
+import {
+  getChapterDetailsUC,
+  uploadVideoLinkUC,
+} from "../../../../../api/svUrlConstructs";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useAxiosDataFunction from "../../../../../hooks/useAxiosDataFunction";
@@ -94,8 +97,7 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 const AdminChapterDetailPage = () => {
   const { id } = useParams();
   const accessToken = useSelector((state) => state?.data?.accessToken);
-  const [chapterDetails, setchapterDetails] = useState({})
-
+  const [chapterDetails, setchapterDetails] = useState({});
 
   const [
     chapterDetailResponse,
@@ -121,38 +123,34 @@ const AdminChapterDetailPage = () => {
   }, [id]);
 
   useEffect(() => {
-    if(chapterDetailResponse?.data?.statuscode === 200){
-      setchapterDetails(chapterDetailResponse?.data?.data)
+    if (chapterDetailResponse?.data?.statuscode === 200) {
+      setchapterDetails(chapterDetailResponse?.data?.data);
     }
-    
   }, [chapterDetailResponse]);
 
-    const [
-      updateVideoResponse,
-      updateVideoError,
-      updateVideoIsLoading,
-      updateVideo,
-    ] = useAxiosDataFunction();
-  
-    // fetch job Application List
-    const putVideoData = (id, data) => {
-      updateVideo({
-        axiosInstance: axios,
-        method: "put",
-        url: uploadVideoLinkUC(id),
-        data: data,
-        token: accessToken,
-      });
-    };
+  const [
+    updateVideoResponse,
+    updateVideoError,
+    updateVideoIsLoading,
+    updateVideo,
+  ] = useAxiosDataFunction();
 
-    useEffect(() => {
-      if(updateVideoResponse?.data?.statuscode === 200){
-        getChapterDetail(id);
-      }
-      
-    }, [updateVideoResponse]);
+  // fetch job Application List
+  const putVideoData = (id, data) => {
+    updateVideo({
+      axiosInstance: axios,
+      method: "put",
+      url: uploadVideoLinkUC(id),
+      data: data,
+      token: accessToken,
+    });
+  };
 
-  console.log("chapterDetails", chapterDetails)
+  useEffect(() => {
+    if (updateVideoResponse?.data?.statuscode === 200) {
+      getChapterDetail(id);
+    }
+  }, [updateVideoResponse]);
 
   return (
     <Box sx={{ padding: "1rem" }}>
@@ -161,77 +159,84 @@ const AdminChapterDetailPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <MainCard title={"Basic Details"}>
-            {
-              Object.keys(chapterDetails).length !== 0 ? (
-                <Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Name:
-                </Typography>
-                <Typography variant="body1">{chapterDetails?.name}</Typography>
+            {Object.keys(chapterDetails).length !== 0 ? (
+              <Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Name:
+                  </Typography>
+                  <Typography variant="body1">
+                    {chapterDetails?.name}
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Description:
+                  </Typography>
+                  <Typography variant="body1">
+                    {chapterDetails?.description}
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Subject:
+                  </Typography>
+                  <Typography variant="body1">
+                    {chapterDetails?.subject?.displayName} (
+                    {chapterDetails?.subject?.board})
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Class:
+                  </Typography>
+                  <Typography variant="body1">
+                    {chapterDetails?.class?.name} (Grade{" "}
+                    {chapterDetails?.class?.classGrade})
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Academic Year:
+                  </Typography>
+                  <Typography variant="body1">
+                    {chapterDetails?.academicYear?.displayName} (
+                    {chapterDetails?.academicYear?.batchName})
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body1" fontWeight="bold">
+                    Published Date:
+                  </Typography>
+                  <Typography variant="body1">
+                    {new Date(
+                      chapterDetails?.publishedDate
+                    ).toLocaleDateString()}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="bold">
+                    Status:
+                  </Typography>
+                  <Chip
+                    label={chapterDetails?.active ? "Active" : "Inactive"}
+                    color={chapterDetails?.active ? "success" : "error"}
+                  />
+                </Box>
               </Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Description:
-                </Typography>
-                <Typography variant="body1">
-                  {chapterDetails?.description}
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Subject:
-                </Typography>
-                <Typography variant="body1">
-                  {chapterDetails?.subject?.displayName} ({chapterDetails?.subject?.board}
-                  )
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Class:
-                </Typography>
-                <Typography variant="body1">
-                  {chapterDetails?.class?.name} (Grade {chapterDetails?.class?.classGrade}
-                  )
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Academic Year:
-                </Typography>
-                <Typography variant="body1">
-                  {chapterDetails?.academicYear?.displayName} (
-                  {chapterDetails?.academicYear?.batchName})
-                </Typography>
-              </Box>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="body1" fontWeight="bold">
-                  Published Date:
-                </Typography>
-                <Typography variant="body1">
-                  {new Date(chapterDetails?.publishedDate).toLocaleDateString()}
-                </Typography>
-              </Box>
+            ) : (
               <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
               >
-                <Typography variant="body1" fontWeight="bold">
-                  Status:
-                </Typography>
-                <Chip
-                  label={chapterDetails?.active ? "Active" : "Inactive"}
-                  color={chapterDetails?.active ? "success" : "error"}
-                />
-              </Box>
-            </Box>
-              ):(<Box display={"flex"} justifyContent={"center"} alignItems={"center"} >
                 Something went wrong
-              </Box>)
-            }
-            
+              </Box>
+            )}
           </MainCard>
         </Grid>
         <Grid item xs={6}>
@@ -287,7 +292,11 @@ const AdminChapterDetailPage = () => {
           title={"Video Section"}
           secondary={
             <>
-              <UpdateChapterVideo putVideoData={putVideoData} chapterId={id} videoDetails={chapterDetails?.videos} />
+              <UpdateChapterVideo
+                putVideoData={putVideoData}
+                chapterId={id}
+                videoDetails={chapterDetails?.videos}
+              />
             </>
           }
         >
@@ -296,14 +305,17 @@ const AdminChapterDetailPage = () => {
               <strong>Title:</strong> {chapterDetails?.videos?.title}
             </Typography>
             <Typography variant="body1">
-              <strong>Description:</strong> {chapterDetails?.videos?.description}
+              <strong>Description:</strong>{" "}
+              {chapterDetails?.videos?.description}
             </Typography>
             <Typography variant="body1">
               <strong>Author:</strong> {chapterDetails?.videos?.author}
             </Typography>
             <Typography variant="body1">
               <strong>Upload Date:</strong>{" "}
-              {new Date(chapterDetails?.videos?.uploadDate).toLocaleDateString()}
+              {new Date(
+                chapterDetails?.videos?.uploadDate
+              ).toLocaleDateString()}
             </Typography>
             <Box sx={{ mt: 2 }}>
               <iframe

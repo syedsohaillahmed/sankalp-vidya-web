@@ -27,9 +27,12 @@ import { ChpterContext } from "./AdminClass9ChapterTab";
 const AdminClass9AllChapters = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const [chapterData, setChapterData] = useState([]);
-  const { createchapterResponse,
+  const {
+    createchapterResponse,
     createchapterError,
-    createchapterIsLoading, putVideoData } = useContext(ChpterContext)
+    createchapterIsLoading,
+    putVideoData,
+  } = useContext(ChpterContext);
   const [
     allChapterResponse,
     allChapterError,
@@ -52,17 +55,13 @@ const AdminClass9AllChapters = () => {
   }, []);
 
   useEffect(() => {
-    if(createchapterResponse?.data?.statuscode === 201){
-      console.log("createchapterResponse", createchapterResponse)
+    if (createchapterResponse?.data?.statuscode === 201) {
       getAllChapter();
     }
-    
   }, [createchapterResponse]);
-  
 
   useEffect(() => {
     if (allChapterResponse?.data?.statuscode === 200) {
-      console.log("coming inside", allChapterResponse?.data?.data);
       setChapterData(allChapterResponse?.data?.data);
     }
   }, [allChapterResponse]);

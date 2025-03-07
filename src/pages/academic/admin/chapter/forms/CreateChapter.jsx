@@ -53,7 +53,6 @@ const CreateChapter = () => {
   };
 
   const onSubmit = (data, closePopover) => {
-    console.log("Form Data:", data);
     const chapterObj = {
       name: data.name,
       description: data.description,
@@ -61,7 +60,6 @@ const CreateChapter = () => {
       subjectId: data.subject,
       academicYearId: data.academicYear,
     };
-    console.log("studentobj", chapterObj);
     postChapter(chapterObj);
     reset();
     closePopover(); // Close the popover

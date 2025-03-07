@@ -14,9 +14,8 @@ import { useContext } from "react";
 const Class9Students = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const navigate = useNavigate();
-  const {deleteStudentResponse,
-    deleteStudentError,
-    deleteStudentIsLoading} = useContext(StudentContext)
+  const { deleteStudentResponse, deleteStudentError, deleteStudentIsLoading } =
+    useContext(StudentContext);
   const [
     studentsListingResponse,
     studentsListingError,
@@ -38,12 +37,11 @@ const Class9Students = () => {
     getStudentsListing();
   }, []);
 
-  useEffect(()=>{
-    if(deleteStudentResponse?.data?.statuscode === 200){
+  useEffect(() => {
+    if (deleteStudentResponse?.data?.statuscode === 200) {
       getStudentsListing();
     }
-
-  }, [deleteStudentResponse])
+  }, [deleteStudentResponse]);
 
   const clickedTableRow = (row) => {
     navigate(`/students/${row._id}`);
