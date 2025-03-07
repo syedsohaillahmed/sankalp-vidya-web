@@ -32,6 +32,10 @@ const AdminClass9AllChapters = () => {
     createchapterError,
     createchapterIsLoading,
     putVideoData,
+
+    deletechapterResponse,
+    deletechapterError,
+    deletechapterIsLoading,
   } = useContext(ChpterContext);
   const [
     allChapterResponse,
@@ -65,6 +69,12 @@ const AdminClass9AllChapters = () => {
       setChapterData(allChapterResponse?.data?.data);
     }
   }, [allChapterResponse]);
+
+  useEffect(() => {
+    if (deletechapterResponse?.data?.statuscode === 200) {
+      getAllChapter();
+    }
+  }, [deletechapterResponse]);
 
   const navigate = useNavigate();
 

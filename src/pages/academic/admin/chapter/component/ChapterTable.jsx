@@ -1,9 +1,37 @@
-import { Box, Paper, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Box, IconButton, Paper, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
 import { StyledTableCell, StyledTableContainer, StyledTableHead, StyledTableRow } from "../../../../../SamplePages/DeepseekTable";
 import ListLoader from "../../../../../components/loader/ListLoader";
+import { DeleteForever } from "@mui/icons-material";
+import { useState } from "react";
+import ConfirmationDialog from "../../../../../components/dialog/ConfirmationDialog";
+import { useContext } from "react";
+import { ChpterContext } from "../listing/class9/AdminClass9ChapterTab";
 
 const ChapterTable = ({allChapterIsLoading, allChapterError, chapterData=[], handleChapterRowClick}) => {
+
+const {removeChapter} = useContext(ChpterContext)
+  const [open, setOpen] = React.useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+  
+  
+  
+    const handleClose = () => {
+      setSelectedRow(null)
+      setOpen(false);
+    };
+  
+    const handleDeleteClick = (row) => {
+      setSelectedRow(row);
+      setOpen(true);
+    };
+
+    const handleDeleteStudent = () => {
+      if(selectedRow){
+        removeChapter(selectedRow._id)
+        handleClose()
+      }
+    };
   return (
     <>
       <Box>
@@ -24,6 +52,7 @@ const ChapterTable = ({allChapterIsLoading, allChapterError, chapterData=[], han
                       <StyledTableCell>Subject</StyledTableCell>
                       <StyledTableCell>Notes uploaded</StyledTableCell>
                       <StyledTableCell>video uploaded</StyledTableCell>
+                      <StyledTableCell>Delete</StyledTableCell>
                     </TableRow>
                   </StyledTableHead>
                   <TableBody>
@@ -41,6 +70,16 @@ const ChapterTable = ({allChapterIsLoading, allChapterError, chapterData=[], han
                             <TableCell>{row?.subject?.displayName}</TableCell>
                             <TableCell>{"true/false"}</TableCell>
                             <TableCell>{"true/false"}</TableCell>
+                            <TableCell>
+                            <IconButton
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleDeleteClick(row);
+                              }}
+                            >
+                              <DeleteForever />
+                            </IconButton>
+                          </TableCell>
                           </StyledTableRow>
                         );
                       })}
@@ -50,6 +89,13 @@ const ChapterTable = ({allChapterIsLoading, allChapterError, chapterData=[], han
             </Box>
           )}
       </Box>
+      <ConfirmationDialog
+        open={open}
+        dialogTitle={"Delete Chapter"}
+        dialogContentText={`Are you sure you want to delete ${selectedRow?.name}?`}
+        handleClose={handleClose}
+        handleConfirm={handleDeleteStudent}
+      />
     </>
   );
 };

@@ -30,6 +30,7 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useAxiosDataFunction from "../../../../../hooks/useAxiosDataFunction";
+import UpdateChapterDetails from "../forms/UpdateChapterDetails";
 
 // Mock data for the Chapter model
 const mockChapter = {
@@ -146,6 +147,24 @@ const AdminChapterDetailPage = () => {
     });
   };
 
+  const [
+    updateChapterResponse,
+    updateChapterError,
+    updateChapterIsLoading,
+    updateChapter,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const updateChapterData = (id, data) => {
+    updateChapter({
+      axiosInstance: axios,
+      method: "put",
+      url: getChapterDetailsUC(id),
+      data: data,
+      token: accessToken,
+    });
+  };
+
   useEffect(() => {
     if (updateVideoResponse?.data?.statuscode === 200) {
       getChapterDetail(id);
@@ -157,8 +176,15 @@ const AdminChapterDetailPage = () => {
       <Header title="Chapter" />
       {/* Basic Details Section */}
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MainCard title={"Basic Details"}>
+        <Grid item xs={12} sm={6} >
+          <MainCard
+            title={"Basic Details"}
+            secondary={
+              <>
+                <UpdateChapterDetails chapterId={id} chapterDetails={chapterDetails} updateChapterData={updateChapterData} />
+              </>
+            }
+          >
             {Object.keys(chapterDetails).length !== 0 ? (
               <Box>
                 <Box display="flex" justifyContent="space-between">
@@ -239,7 +265,7 @@ const AdminChapterDetailPage = () => {
             )}
           </MainCard>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} sm={6}>
           <MainCard title={"Notes"}>
             <List>
               {mockChapter.notes.map((note, index) => (

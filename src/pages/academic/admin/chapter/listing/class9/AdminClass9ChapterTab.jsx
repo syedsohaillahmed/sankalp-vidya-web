@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import {
   getAcademicyearUC,
   getAllChapterUC,
+  getChapterDetailsUC,
   getClassUC,
   getSubjectUC,
 } from "../../../../../../api/svUrlConstructs";
@@ -118,6 +119,23 @@ const AdminClass9ChapterTab = () => {
     });
   };
 
+  const [
+    deletechapterResponse,
+    deletechapterError,
+    deletechapterIsLoading,
+    deleteChapter,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const removeChapter = (id) => {
+    deleteChapter({
+      axiosInstance: axios,
+      method: "delete",
+      url: getChapterDetailsUC(id),
+      token: accessToken,
+    });
+  };
+
   const contextValue = useMemo(
     () => ({
       academicYearResponse,
@@ -139,6 +157,11 @@ const AdminClass9ChapterTab = () => {
       createchapterResponse,
       createchapterError,
       createchapterIsLoading,
+
+      removeChapter,
+      deletechapterResponse,
+      deletechapterError,
+      deletechapterIsLoading,
     }),
     [
       academicYearResponse,
@@ -153,6 +176,9 @@ const AdminClass9ChapterTab = () => {
       createchapterResponse,
       createchapterError,
       createchapterIsLoading,
+      deletechapterResponse,
+      deletechapterError,
+      deletechapterIsLoading,
     ]
   );
 

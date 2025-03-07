@@ -42,11 +42,12 @@ const StudentsListing = ({
       setStudentListData(studentsListingResponse?.data?.data?.docs);
     }
   }, [studentsListingResponse]);
+  const { removeStudent } = useContext(StudentContext);
 
   const [open, setOpen] = React.useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
 
-  const { removeStudent } = useContext(StudentContext);
+
 
   const handleClose = () => {
     setSelectedStudentId(null)
@@ -59,7 +60,7 @@ const StudentsListing = ({
   };
 
   const handleDeleteStudent = () => {
-    if(setSelectedStudentId){
+    if(selectedStudentId){
       removeStudent(selectedStudentId._id)
       handleClose()
     }
