@@ -8,10 +8,15 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../components/Header";
 import { Box } from "@mui/material";
 import CreateStudentForm from "../forms/CreateStudentForm";
+import { StudentContext } from "../Student";
+import { useContext } from "react";
 
 const Class9Students = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const navigate = useNavigate();
+  const {deleteStudentResponse,
+    deleteStudentError,
+    deleteStudentIsLoading} = useContext(StudentContext)
   const [
     studentsListingResponse,
     studentsListingError,
@@ -33,8 +38,14 @@ const Class9Students = () => {
     getStudentsListing();
   }, []);
 
+  useEffect(()=>{
+    if(deleteStudentResponse?.data?.statuscode === 200){
+      getStudentsListing();
+    }
+
+  }, [deleteStudentResponse])
+
   const clickedTableRow = (row) => {
-    console.log("row clicked:", row);
     navigate(`/students/${row._id}`);
   };
 

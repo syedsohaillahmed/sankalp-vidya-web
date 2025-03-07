@@ -8,6 +8,7 @@ import Class9Students from "./class/Class9Students";
 import {
   getAcademicyearUC,
   getClassUC,
+  getStudentsDetailsUC,
   getStudentsListUC,
 } from "../../api/svUrlConstructs";
 import { useEffect } from "react";
@@ -109,6 +110,24 @@ const Student = () => {
     });
   };
 
+  const [
+    deleteStudentResponse,
+    deleteStudentError,
+    deleteStudentIsLoading,
+    deleteStudent,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const removeStudent = (id) => {
+    deleteStudent({
+      axiosInstance: axios,
+      method: "delete",
+      url: getStudentsDetailsUC(id),
+      // data: data,
+      token: accessToken,
+    });
+  };
+
   const contextValue = useMemo(
     () => ({
       academicYearResponse,
@@ -120,44 +139,60 @@ const Student = () => {
       classIsLoading,
       classError,
       getClass,
-      registerStudent,
-    }),
-    [academicYearResponse, academicYearError, academicYearIsLoading]
-  );
 
-  console.log(
-    "resonseofpost",
-    createStudentResponse,
-    createStudentError,
-    createStudentIsLoading
+      createStudentResponse,
+      createStudentError,
+      createStudentIsLoading,
+      registerStudent,
+
+      deleteStudentResponse,
+      deleteStudentError,
+      deleteStudentIsLoading,
+
+      removeStudent,
+    }),
+    [
+      academicYearResponse,
+      academicYearError,
+      academicYearIsLoading,
+      createStudentResponse,
+      createStudentError,
+      createStudentIsLoading,
+      classResponse,
+      classIsLoading,
+      classError,
+      deleteStudentResponse,
+      deleteStudentError,
+      deleteStudentIsLoading,
+    ]
   );
 
   return (
     <StudentContext.Provider value={contextValue}>
       <Box m="20px">
-      <Header title="Students List " subtitle={"Manage Students List"} />
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Class 9" {...a11yProps(0)} />
-            <Tab label="Class 10" {...a11yProps(1)} />
-            <Tab label="All Students" {...a11yProps(2)} />
-          </Tabs>
+        <Header title="Students List " subtitle={"Manage Students List"} />
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Class 9" {...a11yProps(0)} />
+              <Tab label="Class 10" {...a11yProps(1)} />
+              <Tab label="All Students" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <Class9Students />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <StudentsListing />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            Item Three
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <Class9Students />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <StudentsListing />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          Item Three
-        </CustomTabPanel>
-      </Box>
       </Box>
     </StudentContext.Provider>
   );

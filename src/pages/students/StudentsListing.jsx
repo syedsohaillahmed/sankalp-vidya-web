@@ -1,5 +1,12 @@
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -17,11 +24,16 @@ import {
 } from "../../SamplePages/DeepseekTable";
 import { formatDate } from "../../utils/util";
 import CreateStudentForm from "./forms/CreateStudentForm";
+import { DeleteForever } from "@mui/icons-material";
+import ConfirmationDialog from "../../components/dialog/ConfirmationDialog";
+import { useContext } from "react";
+import { StudentContext } from "./Student";
 const StudentsListing = ({
   studentsListingIsLoading,
   studentsListingError,
   studentsListingResponse,
   clickedTableRow,
+  confirmDelete,
 }) => {
   const [studentListData, setStudentListData] = useState([]);
 
@@ -30,6 +42,29 @@ const StudentsListing = ({
       setStudentListData(studentsListingResponse?.data?.data?.docs);
     }
   }, [studentsListingResponse]);
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+
+  const {removeStudent} = useContext(StudentContext)
+
+  const handleClose = () => {
+    setSelectedStudentId(null)
+    setOpen(false);
+  };
+
+  const handleDeleteClick = (row) => {
+    setSelectedStudentId(row);
+    setOpen(true);
+  };
+
+  console.log("selectedStudentId", selectedStudentId);
+  const handleDeleteStudent = () => {
+    if(setSelectedStudentId){
+      removeStudent(selectedStudentId._id)
+      handleClose()
+    }
+  };
 
   return (
     <>
@@ -52,6 +87,7 @@ const StudentsListing = ({
                     <StyledTableCell>Phone No</StyledTableCell>
                     <StyledTableCell>School</StyledTableCell>
                     <StyledTableCell>Academic Year</StyledTableCell>
+                    <StyledTableCell>Delete</StyledTableCell>
                   </TableRow>
                 </StyledTableHead>
                 <TableBody>
@@ -82,6 +118,16 @@ const StudentsListing = ({
                           <TableCell>
                             {row?.academicYear?.displayName || "--"}
                           </TableCell>
+                          <TableCell>
+                            <IconButton
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleDeleteClick(row);
+                              }}
+                            >
+                              <DeleteForever />
+                            </IconButton>
+                          </TableCell>
                         </StyledTableRow>
                       );
                     })}
@@ -90,6 +136,14 @@ const StudentsListing = ({
             </StyledTableContainer>
           </Box>
         )}
+
+      <ConfirmationDialog
+        open={open}
+        dialogTitle={"Delete Student"}
+        dialogContentText={`Are you sure you want to delete ${selectedStudentId?.basicDetails?.fullName}?`}
+        handleClose={handleClose}
+        handleConfirm={handleDeleteStudent}
+      />
     </>
   );
 };

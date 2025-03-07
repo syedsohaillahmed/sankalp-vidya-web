@@ -44,7 +44,6 @@ const CreateStudentForm = () => {
   };
 
   const onSubmit = (data, closePopover) => {
-    console.log("Form Data:", data);
     const studentObj = {
         roleId: "67aa0f6ddcf922f24c9de891",
         fullName: data.fullName,
@@ -57,7 +56,6 @@ const CreateStudentForm = () => {
         academicYear: data.academicYear
 
     }
-    console.log("studentobj", studentObj)
     registerStudent(studentObj)
     reset();
     closePopover(); // Close the popover
@@ -74,7 +72,6 @@ const CreateStudentForm = () => {
       getClass,
   } = useContext(StudentContext);
 
-  console.log("classresponse", classResponse)
 
   if (academicYearIsLoading) return <div>Loading...</div>;
   if (academicYearError) return <div>Error: {academicYearError.message}</div>;
