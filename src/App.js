@@ -26,6 +26,8 @@ import StudentDetailPage from "./pages/students/StudentDetailPage";
 import VideoPage from "./SamplePages/VideoPage";
 import AdminChapterDetailPage from "./pages/academic/admin/chapter/detailPage/AdminChapterDetailPage";
 import AdminClass9ChapterTab from "./pages/academic/admin/chapter/listing/class9/AdminClass9ChapterTab";
+import LiveSection from "./pages/videos/liveClasses/LiveSection";
+import Setup from "./pages/setup/Setup";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -70,6 +72,7 @@ function App() {
                 <Route path="/students/:id" element={<StudentDetailPage />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
+                <Route path="/liveclasses" element={<LiveSection />} />
                 <Route path="/invoices" element={<Invoices />} />
                 <Route path="/form" element={<Form />} />
                 <Route path="/bar" element={<Bar />} />
@@ -81,6 +84,7 @@ function App() {
                 <Route path="/chapters" element={<VideoPage />} />
                 <Route path="/admin/chapters" element={<AdminClass9ChapterTab />} />
                 <Route path="/admin/chapters/:id" element={<AdminChapterDetailPage />} />
+                <Route path="/setup" element={<Setup />} />
               </Route>
             </Route>
 

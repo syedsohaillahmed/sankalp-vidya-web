@@ -137,30 +137,24 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Data
+              Pages
             </Typography>
+
             <Item
-              title="Manage Team"
-              to="/team"
-              icon={<PeopleOutlinedIcon />}
+              title="Chapters"
+              to="/chapters"
+              icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="User"
-              to="/user"
-              icon={<PeopleOutlinedIcon />}
+              title="Live Classes"
+              to="/liveclasses"
+              icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Students"
-              to="/students"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
+            {/* <Item
               title="Contacts Information"
               to="/contacts"
               icon={<ContactsOutlinedIcon />}
@@ -173,23 +167,10 @@ const Sidebar = () => {
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Pages
-            </Typography>
-            <Item
-              title="Profile"
-              to={userId && `/user/${userId}`}
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
+            
+            {/* <Item
               title="Calendar"
               to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}
@@ -202,9 +183,9 @@ const Sidebar = () => {
               icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
-            <Typography
+            {/* <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
@@ -238,7 +219,7 @@ const Sidebar = () => {
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Typography
               variant="h6"
@@ -255,40 +236,82 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
+<Item
+              title="Set-Up"
+              to="/setup"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Admin Chapters Page
+            </Typography>
+
+            <Item
+              title="Class 9"
+              to="/admin/chapters"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
 <Typography
-            variant="h6"
-            color={colors.grey[300]}
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            Sample pages
-          </Typography>
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Account central
+            </Typography>
+            <Item
+              title="Profile"
+              to={userId && `/user/${userId}`}
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            {/* <Item
+              title="Manage Team"
+              to="/team"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            /> */}
+            <Item
+              title="User"
+              to="/user"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Students"
+              to="/students"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
-          <Item
-            title="Chapters"
-            to="/chapters"
-            icon={<BarChartOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+            {/* <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Sample pages
+            </Typography>
 
-          <Typography
-            variant="h6"
-            color={colors.grey[300]}
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            Admin Chapters Page
-          </Typography>
-
-          <Item
-            title="Class 9"
-            to="/admin/chapters"
-            icon={<BarChartOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+            <Item
+              title="Chapters"
+              to="/chapters"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            /> */}
           </Box>
-
-          
         </Menu>
       </ProSidebar>
     </Box>
