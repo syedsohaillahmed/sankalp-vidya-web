@@ -22,7 +22,7 @@ import ListLoader from "../../../components/loader/ListLoader";
 import { formatDate } from "../../../utils/util";
 import { DeleteForever, EditNote } from "@mui/icons-material";
 
-const ADClassListing = () => {
+const ADClassListing = ({ createClassResponse }) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const [classListdata, setClassListData] = useState([]);
   const [classResponse, classError, classIsLoading, fetchClass] =
@@ -47,6 +47,12 @@ const ADClassListing = () => {
       setClassListData(classResponse?.data?.data);
     }
   }, [classResponse]);
+
+  useEffect(() => {
+    if (createClassResponse?.data?.statuscode === 200) {
+      getClass();
+    }
+  }, [createClassResponse]);
 
   const clickedTableRow = () => {};
 

@@ -103,7 +103,7 @@ const Sidebar = () => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/user.png`}
+                  src={`../../assets/sankalp_vidya_logo.png`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -228,13 +228,7 @@ const Sidebar = () => {
             >
               Academic
             </Typography>
-            <Item
-              title="Class"
-              to="/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            
 
 <Item
               title="Set-Up"
