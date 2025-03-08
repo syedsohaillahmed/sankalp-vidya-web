@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useAxiosDataFunction from "../../../hooks/useAxiosDataFunction";
-import { getFilteredStudentsListUC, getStudentsListUC } from "../../../api/svUrlConstructs";
+import {
+  getFilteredStudentsListUC,
+  getStudentsListUC,
+} from "../../../api/svUrlConstructs";
 import StudentsListing from "../StudentsListing";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +13,10 @@ import { Box } from "@mui/material";
 import CreateStudentForm from "../forms/CreateStudentForm";
 import { StudentContext } from "../Student";
 import { useContext } from "react";
-
-const Class9Students = () => {
+const Class10Students = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const navigate = useNavigate();
+  const [classId, setClassId] = useState("")
   const {
     classResponse,
     classIsLoading,
@@ -22,7 +25,6 @@ const Class9Students = () => {
     deleteStudentError,
     deleteStudentIsLoading,
   } = useContext(StudentContext);
-  const [classId, setClassId] = useState("");
   const [
     studentsListingResponse,
     studentsListingError,
@@ -44,13 +46,13 @@ const Class9Students = () => {
     console.log("classResponse", classResponse);
     if (classResponse?.data?.statuscode === 200) {
       const classx = classResponse?.data?.data?.filter(
-        (classItem) => classItem.classGrade === 9
+        (classItem) => classItem.classGrade === 10
       );
 
       if (classx && classx.length > 0) {
         const class10Id = classx[0]._id;
 
-        setClassId(class10Id);
+        setClassId(class10Id)
         getStudentsListing(class10Id);
       }
     }
@@ -81,4 +83,4 @@ const Class9Students = () => {
   );
 };
 
-export default Class9Students;
+export default Class10Students;

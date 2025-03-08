@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 import { createContext } from "react";
 import { useMemo } from "react";
 import Header from "../../components/Header";
+import ClassAllStudents from "./class/ClassAllStudents";
+import Class10Students from "./class/Class10Students";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -178,19 +180,20 @@ const Student = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Class 9" {...a11yProps(0)} />
-              <Tab label="Class 10" {...a11yProps(1)} />
-              <Tab label="All Students" {...a11yProps(2)} />
+              <Tab label="All Students" {...a11yProps(0)} />
+              <Tab label="Class 9" {...a11yProps(1)} />
+              <Tab label="Class 10" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <Class9Students />
+          <ClassAllStudents />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <StudentsListing />
+          <Class9Students />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            Item Three
+          <Class10Students />
+           
           </CustomTabPanel>
         </Box>
       </Box>

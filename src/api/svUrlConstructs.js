@@ -14,6 +14,10 @@ export const getUserListdUC = () => {
 export const getStudentsListUC = ()=>{
     return `${baseUrl}/users/student`
 }
+// localhost:8000/api/v1/users/student?gender=male&classId=67b0c71a4d2ec69a23910599
+export const getFilteredStudentsListUC = (classId)=>{
+  return `${baseUrl}/users/student?classId=${classId}`
+}
 
 export const getStudentsDetailsUC = (studentId)=>{
   return `${baseUrl}/users/student/${studentId}`
