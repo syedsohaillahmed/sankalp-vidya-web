@@ -22,7 +22,7 @@ import {
 import { DeleteForever, EditNote } from "@mui/icons-material";
 import ListLoader from "../../../components/loader/ListLoader";
 
-const ADSubjectListing = () => {
+const ADSubjectListing = ({ createSubjectResponse }) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const [subjectListdata, setSubjectListData] = useState([]);
 
@@ -48,6 +48,13 @@ const ADSubjectListing = () => {
       setSubjectListData(subjectResponse?.data?.data);
     }
   }, [subjectResponse]);
+
+  useEffect(() => {
+    console.log("createSubjectResponse", createSubjectResponse);
+    if (createSubjectResponse?.data?.statuscode === 201) {
+      getSubject();
+    }
+  }, [createSubjectResponse]);
 
   const clickedTableRow = () => {};
   return (

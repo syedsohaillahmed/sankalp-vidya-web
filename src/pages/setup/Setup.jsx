@@ -6,10 +6,11 @@ import ADClassListing from "./classes/ADClassListing";
 import ADCreateClassForm from "./classes/ADCreateClassForm";
 import ADSubjectListing from "./subjects/ADSubjectListing";
 import ADAcadYearListing from "./academcYear/ADAcadYearListing";
-import { getClassUC } from "../../api/svUrlConstructs";
+import { getClassUC, getSubjectUC } from "../../api/svUrlConstructs";
 import { useSelector } from "react-redux";
 import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 import axios from "axios";
+import AdCreateSubjectform from "./subjects/AdCreateSubjectform";
 
 const Setup = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -27,6 +28,24 @@ const Setup = () => {
       axiosInstance: axios,
       method: "post",
       url: getClassUC(),
+      data: data,
+      token: accessToken,
+    });
+  };
+
+  const [
+    createSubjectResponse,
+    createSubjectError,
+    createSubjectIsLoading,
+    createSubject,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const PostSubject = (data) => {
+    createSubject({
+      axiosInstance: axios,
+      method: "post",
+      url: getSubjectUC(),
       data: data,
       token: accessToken,
     });
@@ -50,8 +69,11 @@ const Setup = () => {
           </MainCard>
         </Grid>{" "}
         <Grid item xs={12}>
-          <MainCard title="Subjects">
-            <ADSubjectListing />
+          <MainCard
+            title="Subjects"
+            secondary={<AdCreateSubjectform PostSubject={PostSubject} />}
+          >
+            <ADSubjectListing createSubjectResponse={createSubjectResponse} />
           </MainCard>
         </Grid>
       </Grid>
