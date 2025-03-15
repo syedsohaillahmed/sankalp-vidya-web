@@ -6,11 +6,12 @@ import ADClassListing from "./classes/ADClassListing";
 import ADCreateClassForm from "./classes/ADCreateClassForm";
 import ADSubjectListing from "./subjects/ADSubjectListing";
 import ADAcadYearListing from "./academcYear/ADAcadYearListing";
-import { getClassUC, getSubjectUC } from "../../api/svUrlConstructs";
+import { getAcademicyearUC, getClassUC, getSubjectUC } from "../../api/svUrlConstructs";
 import { useSelector } from "react-redux";
 import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 import axios from "axios";
 import AdCreateSubjectform from "./subjects/AdCreateSubjectform";
+import AdCreateAcdmyYearForm from "./academcYear/AdCreateAcdmyYearForm";
 
 const Setup = () => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -51,13 +52,31 @@ const Setup = () => {
     });
   };
 
+  const [
+    createAcademicYearResponse,
+    createAcademicYearError,
+    createAcademicYearIsLoading,
+    createAcademicYear,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const postAcademicYear = (data) => {
+    createAcademicYear({
+      axiosInstance: axios,
+      method: "post",
+      url: getAcademicyearUC(),
+      data: data,
+      token: accessToken,
+    });
+  };
+
   return (
     <Box m={1}>
       <Header title={"Setup"} />
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <MainCard title="Academic year">
-            <ADAcadYearListing />
+          <MainCard title="Academic year" secondary={ <AdCreateAcdmyYearForm postAcademicYear={postAcademicYear}  /> } >
+            <ADAcadYearListing createAcademicYearResponse={createAcademicYearResponse} />
           </MainCard>
         </Grid>
         <Grid item xs={12}>

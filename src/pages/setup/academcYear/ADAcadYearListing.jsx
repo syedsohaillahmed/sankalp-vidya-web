@@ -24,7 +24,7 @@ import { DeleteForever, EditNote } from "@mui/icons-material";
 import ListLoader from "../../../components/loader/ListLoader";
 import { formatDate } from "../../../utils/util";
 
-const ADAcadYearListing = () => {
+const ADAcadYearListing = ({createAcademicYearResponse}) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
   const [academcYearListing, setAcademecYearListing] = useState([]);
 
@@ -48,6 +48,13 @@ const ADAcadYearListing = () => {
   useEffect(() => {
     getAcademicYear();
   }, []);
+
+  useEffect(()=>{
+    if(createAcademicYearResponse?.data?.statuscode === 201){
+      getAcademicYear();
+    }
+
+  }, [createAcademicYearResponse])
 
   useEffect(() => {
     if (academicYearResponse?.data?.statuscode === 200) {
