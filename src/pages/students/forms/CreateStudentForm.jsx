@@ -10,10 +10,11 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import FormPopover from "../../../components/formComponent/FormPopover";
 import { StudentContext } from "../Student";
 import { useContext } from "react";
+import axios from "axios";
 
 const CreateStudentForm = () => {
   const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screen
@@ -59,6 +60,45 @@ const CreateStudentForm = () => {
     reset();
     closePopover(); // Close the popover
   };
+  const [phoneExistsError, setPhoneExistsError] = useState("");
+
+
+  const checkPhoneNumberExists = useCallback(async (phoneNo) => {
+    if(phoneNo?.length>9){
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/users/user/availablePhone?phoneNo=${phoneNo}`);
+        if (response?.data?.data?.exists) {
+          setPhoneExistsError("phone number is already taken");
+          return false; // Return false to indicate the phone number is already taken
+        } else {
+          setPhoneExistsError(""); // Clear error message if phone number is available
+          return true; // Return true if phone number is available
+        }
+      } catch (error) {
+        setPhoneExistsError("Error checking phone number.");
+        return false;
+      }
+    }
+    
+  }, []);
+
+  const [studentIdExistsError, setStudentIdExistsError] = useState("");
+  const checkStudentidExists = useCallback(async (studentId) => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/users/student/rollnoexists?studentId=${studentId}`);
+        if (response?.data?.data?.exists) {
+          setStudentIdExistsError("Student Id is already taken");
+          return false; 
+        } else {
+          setStudentIdExistsError(""); 
+          return true; 
+        }
+      } catch (error) {
+        setStudentIdExistsError("Error checking phone number.");
+        return false;
+      }
+    
+  }, []);
 
   const {
     academicYearResponse,
@@ -117,8 +157,9 @@ const CreateStudentForm = () => {
                       fullWidth
                       label="Phone Number"
                       type="tel"
-                      error={!!errors.phoneNo}
-                      helperText={errors.phoneNo?.message}
+                      onBlur={() => checkPhoneNumberExists(field.value)}
+                      error={!!errors.phoneNo || !!phoneExistsError} // Show error if exists
+                      helperText={errors.phoneNo?.message || phoneExistsError}
                       margin="dense"
                     />
                   )}
@@ -245,8 +286,9 @@ const CreateStudentForm = () => {
                       {...field}
                       fullWidth
                       label="Student ID"
-                      error={!!errors.studentId}
-                      helperText={errors.studentId?.message}
+                      onBlur={() => checkStudentidExists(field.value)}
+                      error={!!errors.studentId || !! studentIdExistsError}
+                      helperText={errors.studentId?.message || studentIdExistsError}
                       margin="dense"
                     />
                   )}
