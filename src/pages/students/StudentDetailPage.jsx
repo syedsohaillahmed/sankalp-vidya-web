@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import moment from "moment";
 import { genderList } from "../../store/constants";
+import StudentDetailedInfoPage from "./detailPage/StudentDetailedInfoPage";
 
 const StudentDetailPage = () => {
   const { id } = useParams();
@@ -29,13 +30,11 @@ const StudentDetailPage = () => {
 
   const accessToken = useSelector((state) => state.data.accessToken);
   const [isEditingBasicInfo, setIsEditingBasicInfo] = useState(false);
-  const [isEditingDetailedInfo, setIseEditingDetailedInfo] = useState(false)
+  const [isEditingDetailedInfo, setIseEditingDetailedInfo] = useState(false);
   const toggleEdit = () => {
     setIsEditingBasicInfo(true);
   };
-  const toggleEditDetailednfo = () => {
-    setIseEditingDetailedInfo(true);
-  };
+
   const [
     studentDetailsResponse,
     studentDetailsError,
@@ -119,6 +118,7 @@ const StudentDetailPage = () => {
   }, [id]);
 
   const handleBasicDetailsSubmit = (data) => {
+    console.log("daata", data);
     const updateData = {
       fullName: data.fullName,
       alternatePhoneNo: data.alternateContactNumber,
@@ -130,16 +130,10 @@ const StudentDetailPage = () => {
       studentDetailsResponse?.data?.data?.userDetail?._id || "",
       updateData
     );
+    handleForCancel();
   };
 
-  const handleForCancel = () => {
-    setIsEditingBasicInfo(false);
-    handleResetValues(studentDetailsResponse?.data?.data?.userDetail);
-  };
-
-  const handleDIFormCancel = () => {
-    setIseEditingDetailedInfo(false);
-  };
+  
 
   useEffect(() => {
     if (updateStudentDetailsResponse?.data?.statuscode === 201) {
@@ -151,6 +145,64 @@ const StudentDetailPage = () => {
     updateStudentDetailsError,
     updateStudentDetailsIsLoading,
   ]);
+
+  //exist code
+  const [phoneExistsError, setPhoneExistsError] = useState("");
+
+  const checkPhoneNumberExists = useCallback(async (phoneNo) => {
+    console.log("coming here")
+    if (phoneNo?.length > 9) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/users/user/availablePhone?phoneNo=${phoneNo}`
+        );
+        if (response?.data?.data?.exists) {
+          setPhoneExistsError("phone number is already taken");
+          return false; // Return false to indicate the phone number is already taken
+        } else {
+          setPhoneExistsError(""); // Clear error message if phone number is available
+          return true; // Return true if phone number is available
+        }
+      } catch (error) {
+        setPhoneExistsError("Error checking phone number.");
+        return false;
+      }
+    }
+  }, []);
+
+  const [emailExistsError, setEmailExistsError] = useState("");
+
+  const checkEmailExists = useCallback(async (email) => {
+    if (!email.trim()) {  // Check if the email is an empty string or contains only spaces
+      setEmailExistsError(""); // Clear any error if the email is empty
+      return false; // Return false to indicate no need to check the email
+    }
+  
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/users/user/emailexist?email=${email}`
+        );
+        if (response?.data?.data?.exists) {
+          setEmailExistsError("email is already taken");
+          return false; // Return false to indicate the phone number is already taken
+        } else {
+          setEmailExistsError(""); // Clear error message if phone number is available
+          return true; // Return true if phone number is available
+        }
+      } catch (error) {
+        setEmailExistsError("Error checking Email.");
+        return false;
+      }
+
+    
+  }, []);
+
+  const handleForCancel = () => {
+    setIsEditingBasicInfo(false);
+    setEmailExistsError("")
+    setPhoneExistsError("")
+    handleResetValues(studentDetailsResponse?.data?.data?.userDetail);
+  };
 
   return (
     <Box m="20px">
@@ -211,7 +263,7 @@ const StudentDetailPage = () => {
                   />
                 )}
               />
-              <Controller
+              {/* <Controller
                 name="userName"
                 control={control}
                 render={({ field }) => (
@@ -228,11 +280,11 @@ const StudentDetailPage = () => {
                     }}
                   />
                 )}
-              />
+              /> */}
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: "Email is required" }}
+                // rules={{ required: "Email is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
@@ -240,12 +292,19 @@ const StudentDetailPage = () => {
                     variant="filled"
                     type="email"
                     label="Email"
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    sx={{ gridColumn: "span 1" }}
-                    inputProps={{
-                      readOnly: !isEditingBasicInfo,
+                    onBlur={() => {
+                      if (field.value !== studentDetailsResponse?.data?.data?.userDetail?.email) {
+                        checkEmailExists(field.value);
+                      }else{
+                        setEmailExistsError("")
+                      }
                     }}
+                    error={!!error || !! emailExistsError}
+                    helperText={error ? error.message : null || emailExistsError}
+                    sx={{ gridColumn: "span 1" }}
+                    // inputProps={{
+                    //   readOnly: !isEditingBasicInfo,
+                    // }}
                   />
                 )}
               />
@@ -260,13 +319,22 @@ const StudentDetailPage = () => {
                     variant="filled"
                     type="text"
                     label="Contact Number"
-                    error={!!error}
-                    disabled={isEditingBasicInfo}
-                    helperText={error ? error.message : null}
-                    sx={{ gridColumn: "span 1" }}
-                    inputProps={{
-                      readOnly: true,
+                    onBlur={() => {
+                      if (field.value !== studentDetailsResponse?.data?.data?.userDetail?.phoneNo) {
+                        checkPhoneNumberExists(field.value);
+                      }else{
+                        setPhoneExistsError("")
+                      }
                     }}
+                    error={!!error || !!phoneExistsError}
+                    // disabled={isEditingBasicInfo}
+                    helperText={
+                      error ? error.message : null || phoneExistsError
+                    }
+                    sx={{ gridColumn: "span 1" }}
+                    // inputProps={{
+                    //   readOnly: true,
+                    // }}
                   />
                 )}
               />
@@ -370,183 +438,10 @@ const StudentDetailPage = () => {
           </form>
         </Box>
       </MainCard>
-      <Box mt={"1.5rem"}>
-        <MainCard title="Detailed Info" secondary={
-          <Box mb="20px" display={"flex"} justifySelf={"flex-end"}>
-            {!isEditingDetailedInfo && (
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={toggleEditDetailednfo}
-              >
-                Edit
-              </Button>
-            )}
-            {isEditingDetailedInfo && (
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={handleDIFormCancel}
-              >
-                Cancel
-              </Button>
-            )}
-          </Box>}>
-          <Box mb="20px">
-            <form onSubmit={handleSubmit(handleBasicDetailsSubmit)}>
-              <Box
-                display="grid"
-                gap="30px"
-                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                sx={{
-                  "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-                }}
-              >
-                <Controller
-                  name="Student ID"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="School"
-                      disabled={isEditingDetailedInfo}
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
 
-                <Controller
-                  name="classGrade"
-                  control={control}
-                  rules={{ required: "Full Name is required" }}
-                  render={({ field, fieldState: { error } }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="Class Grade"
-                      error={!!error}
-                      disabled={isEditingDetailedInfo}
-                      helperText={error ? error.message : null}
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingDetailedInfo,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="academicYear"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="Academic Year"
-                      disabled={isEditingBasicInfo}
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="fatherName"
-                  control={control}
-                  rules={{ required: "Email is required" }}
-                  render={({ field, fieldState: { error } }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="Father Name"
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="motherName"
-                  control={control}
-                  rules={{ required: "Contact Number is required" }}
-                  render={({ field, fieldState: { error } }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="Mother Name"
-                      error={!!error}
-                      disabled={isEditingBasicInfo}
-                      helperText={error ? error.message : null}
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="caste"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="Caste"
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="school"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="School"
-                      sx={{ gridColumn: "span 1" }}
-                      inputProps={{
-                        readOnly: !isEditingBasicInfo,
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-              {isEditingDetailedInfo && (
-                <Box display="flex" justifyContent="end" mt="20px">
-                  <Button type="submit" color="secondary" variant="contained">
-                    Update
-                  </Button>
-                </Box>
-              )}
-            </form>
-          </Box>
-        </MainCard>
-      </Box>
+      <StudentDetailedInfoPage
+        studentDetailsResponse={studentDetailsResponse}
+      />
     </Box>
   );
 };
