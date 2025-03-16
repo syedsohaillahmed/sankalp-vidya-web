@@ -14,13 +14,14 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import { getClassUC } from "../../../api/svUrlConstructs";
+import { getClassByIdUC, getClassUC } from "../../../api/svUrlConstructs";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import useAxiosDataFunction from "../../../hooks/useAxiosDataFunction";
 import ListLoader from "../../../components/loader/ListLoader";
 import { formatDate } from "../../../utils/util";
 import { DeleteForever, EditNote } from "@mui/icons-material";
+import ConfirmationDialog from "../../../components/dialog/ConfirmationDialog";
 
 const ADClassListing = ({ createClassResponse }) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -55,6 +56,53 @@ const ADClassListing = ({ createClassResponse }) => {
   }, [createClassResponse]);
 
   const clickedTableRow = () => {};
+
+
+
+  //delete functionlity
+  const [CFDialogOpen, setCFDiaogOpen] = React.useState(false);
+    const [selectedClass, setSelectedClass] = useState(null);
+  
+    const handleDeleteClick = (row) => {
+      setSelectedClass(row);
+      setCFDiaogOpen(true);
+    };
+  
+    const handleClose = () => {
+      setSelectedClass(null);
+      setCFDiaogOpen(false);
+    };
+  
+    const [
+      deleteClassResponse,
+      deleteClassError,
+      deleteClassIsLoading,
+      deleteClass,
+    ] = useAxiosDataFunction();
+  
+    // fetch job Application List
+    const removeClass = (id) => {
+      deleteClass({
+        axiosInstance: axios,
+        method: "delete",
+        url: getClassByIdUC(id),
+        token: accessToken,
+      });
+    };
+  
+    const handleDeleteClass = () => {
+      if (selectedClass) {
+        removeClass(selectedClass?._id);
+        handleClose();
+      }
+    };
+  
+    
+    useEffect(() => {
+      if (deleteClassResponse?.data?.statuscode === 200) {
+        getClass();
+      }
+    }, [deleteClassResponse]);
 
   return (
     <>
@@ -98,7 +146,7 @@ const ADClassListing = ({ createClassResponse }) => {
                           <IconButton
                             onClick={(event) => {
                               event.stopPropagation();
-                              // handleDeleteClick(row);
+                              handleDeleteClick(row);
                             }}
                           >
                             <DeleteForever />
@@ -118,6 +166,13 @@ const ADClassListing = ({ createClassResponse }) => {
               </TableBody>
             </Table>
           </StyledTableContainer>
+          <ConfirmationDialog 
+          open={CFDialogOpen} 
+                      dialogTitle={"Delete Class"}
+                      dialogContentText={`Are you sure you want to delete ${selectedClass?.name}?`}
+                      handleClose={handleClose}
+                      handleConfirm={handleDeleteClass}
+          />
         </Box>
       )}
     </>

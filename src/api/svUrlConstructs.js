@@ -42,16 +42,32 @@ export const uploadVideoLinkUC = (chapterId)=>{
 
 
 //genral
+// academic year
 export const getAcademicyearUC = ()=>{
   return `${baseUrl}/academic/academicYearbatch`
 }
 
+export const getAcademicyearByIdUC = (id)=>{
+  return `${baseUrl}/academic/academicYearbatch/${id}`
+}
+
+//class
 export const getClassUC = ()=>{
   return `${baseUrl}/academic/class`
 }
 
+export const getClassByIdUC = (id)=>{
+  return `${baseUrl}/academic/class/${id}`
+}
+
+
+//subject
 export const getSubjectUC = ()=>{
   return `${baseUrl}/academic/subject`
+}
+
+export const getSubjectByIdUC = (id)=>{
+  return `${baseUrl}/academic/subject/${id}`
 }
 
 

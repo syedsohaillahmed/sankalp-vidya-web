@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useAxiosDataFunction from "../../../hooks/useAxiosDataFunction";
-import { getAcademicyearUC } from "../../../api/svUrlConstructs";
+import { getAcademicyearByIdUC, getAcademicyearUC } from "../../../api/svUrlConstructs";
 import axios from "axios";
 import {
   Box,
@@ -23,6 +23,7 @@ import {
 import { DeleteForever, EditNote } from "@mui/icons-material";
 import ListLoader from "../../../components/loader/ListLoader";
 import { formatDate } from "../../../utils/util";
+import ConfirmationDialog from "../../../components/dialog/ConfirmationDialog";
 
 const ADAcadYearListing = ({createAcademicYearResponse}) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -61,7 +62,56 @@ const ADAcadYearListing = ({createAcademicYearResponse}) => {
       setAcademecYearListing(academicYearResponse?.data?.data);
     }
   }, [academicYearResponse]);
+
+
   const clickedTableRow = () => {};
+
+//delete functionlity
+const [CFDialogOpen, setCFDiaogOpen] = React.useState(false);
+const [selectedAcadYear, setSelectedAcadYear] = useState(null);
+
+const handleDeleteClick = (row) => {
+  setSelectedAcadYear(row);
+  setCFDiaogOpen(true);
+};
+
+
+const handleClose = () => {
+  setSelectedAcadYear(null);
+  setCFDiaogOpen(false);
+};
+
+const [
+  deleteAcadYearResponse,
+  deleteAcadYearError,
+  deleteAcadYearIsLoading,
+  deleteAcadYear,
+] = useAxiosDataFunction();
+
+// fetch job Application List
+const removeAcadYear = (id) => {
+  deleteAcadYear({
+    axiosInstance: axios,
+    method: "delete",
+    url: getAcademicyearByIdUC(id),
+    token: accessToken,
+  });
+};
+
+const handleDeleteAcadYear = () => {
+  if (selectedAcadYear) {
+    removeAcadYear(selectedAcadYear?._id);
+    handleClose();
+  }
+};
+
+
+useEffect(() => {
+  if (deleteAcadYearResponse?.data?.statuscode === 200) {
+    getAcademicYear();
+  }
+}, [deleteAcadYearResponse]);
+
   return (
     <>
       {academicYearIsLoading && <ListLoader />}
@@ -107,7 +157,7 @@ const ADAcadYearListing = ({createAcademicYearResponse}) => {
                             <IconButton
                               onClick={(event) => {
                                 event.stopPropagation();
-                                // handleDeleteClick(row);
+                                handleDeleteClick(row);
                               }}
                             >
                               <DeleteForever />
@@ -127,6 +177,13 @@ const ADAcadYearListing = ({createAcademicYearResponse}) => {
                 </TableBody>
               </Table>
             </StyledTableContainer>
+            <ConfirmationDialog 
+                      open={CFDialogOpen} 
+                                  dialogTitle={"Delete Academic year"}
+                                  dialogContentText={`Are you sure you want to delete ${selectedAcadYear?.batchName}?`}
+                                  handleClose={handleClose}
+                                  handleConfirm={handleDeleteAcadYear}
+                      />
           </Box>
         )}
     </>

@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@mui/material";
 
-import { getSubjectUC } from "../../../api/svUrlConstructs";
+import { getSubjectByIdUC, getSubjectUC } from "../../../api/svUrlConstructs";
 import {
   StyledTableCell,
   StyledTableContainer,
@@ -21,6 +21,7 @@ import {
 } from "../../../SamplePages/DeepseekTable";
 import { DeleteForever, EditNote } from "@mui/icons-material";
 import ListLoader from "../../../components/loader/ListLoader";
+import ConfirmationDialog from "../../../components/dialog/ConfirmationDialog";
 
 const ADSubjectListing = ({ createSubjectResponse }) => {
   const accessToken = useSelector((state) => state?.data?.accessToken);
@@ -40,10 +41,6 @@ const ADSubjectListing = ({ createSubjectResponse }) => {
   };
 
   useEffect(() => {
-    getSubject();
-  }, []);
-
-  useEffect(() => {
     if (subjectResponse?.data?.statuscode === 200) {
       setSubjectListData(subjectResponse?.data?.data);
     }
@@ -55,8 +52,57 @@ const ADSubjectListing = ({ createSubjectResponse }) => {
       getSubject();
     }
   }, [createSubjectResponse]);
+  const [CFDialogOpen, setCFDiaogOpen] = React.useState(false);
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
-  const clickedTableRow = () => {};
+  const handleDeleteClick = (row) => {
+    setSelectedSubject(row);
+    setCFDiaogOpen(true);
+  };
+
+
+  const handleClose = () => {
+    setSelectedSubject(null);
+    setCFDiaogOpen(false);
+  };
+
+  const [
+    deleteSubjectResponse,
+    deleteSubjectError,
+    deleteSubjectIsLoading,
+    deleteSubject,
+  ] = useAxiosDataFunction();
+
+  // fetch job Application List
+  const removeSubject = (id) => {
+    deleteSubject({
+      axiosInstance: axios,
+      method: "delete",
+      url: getSubjectByIdUC(id),
+      // data: null,
+      token: accessToken,
+    });
+  };
+
+  const handleDeleteSubject = () => {
+    if (selectedSubject) {
+      removeSubject(selectedSubject?._id);
+      handleClose();
+    }
+  };
+
+  useEffect(() => {
+    getSubject();
+  }, []);
+  useEffect(() => {
+    if (deleteSubjectResponse?.data?.statuscode === 200) {
+      getSubject();
+    }
+  }, [deleteSubjectResponse]);
+
+  const clickedTableRow = (row) => {
+    console.log("clickedsubject row", row);
+  };
   return (
     <>
       {subjectIsLoading && <ListLoader />}
@@ -90,7 +136,7 @@ const ADSubjectListing = ({ createSubjectResponse }) => {
                           <IconButton
                             onClick={(event) => {
                               event.stopPropagation();
-                              // handleDeleteClick(row);
+                              handleDeleteClick(row);
                             }}
                           >
                             <DeleteForever />
@@ -110,6 +156,13 @@ const ADSubjectListing = ({ createSubjectResponse }) => {
               </TableBody>
             </Table>
           </StyledTableContainer>
+          <ConfirmationDialog
+            open={CFDialogOpen}
+            dialogTitle={"Delete Subject"}
+            dialogContentText={`Are you sure you want to delete ${selectedSubject?.name}?`}
+            handleClose={handleClose}
+            handleConfirm={handleDeleteSubject}
+          />
         </Box>
       )}
     </>
