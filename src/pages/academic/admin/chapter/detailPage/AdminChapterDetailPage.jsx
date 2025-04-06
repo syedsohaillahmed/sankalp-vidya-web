@@ -117,6 +117,8 @@ const AdminChapterDetailPage = () => {
     });
   };
 
+  
+
   useEffect(() => {
     if (id) {
       getChapterDetail(id);
@@ -170,6 +172,8 @@ const AdminChapterDetailPage = () => {
       getChapterDetail(id);
     }
   }, [updateVideoResponse]);
+
+  console.log("chapterDetails", chapterDetails)
 
   return (
     <Box sx={{ padding: "1rem" }}>
@@ -313,7 +317,8 @@ const AdminChapterDetailPage = () => {
       </Grid>
 
       {/* Video Section */}
-      <Grid item xs={12} mt={"1rem"}>
+      
+<Grid item xs={12} mt={"1rem"}>
         <MainCard
           title={"Video Section"}
           secondary={
@@ -321,51 +326,75 @@ const AdminChapterDetailPage = () => {
               <UpdateChapterVideo
                 putVideoData={putVideoData}
                 chapterId={id}
-                videoDetails={chapterDetails?.videos}
+                // videoDetails={chapterDetails}
               />
             </>
           }
         >
+          {
+        chapterDetails?.videos?.map((chapterDetails)=>(
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Typography variant="body1">
-              <strong>Title:</strong> {chapterDetails?.videos?.title}
+              <strong>Title:</strong> {chapterDetails?.title}
             </Typography>
             <Typography variant="body1">
               <strong>Description:</strong>{" "}
-              {chapterDetails?.videos?.description}
+              {chapterDetails?.description}
             </Typography>
             <Typography variant="body1">
-              <strong>Author:</strong> {chapterDetails?.videos?.author}
+              <strong>Author:</strong> {chapterDetails?.author}
             </Typography>
             <Typography variant="body1">
               <strong>Upload Date:</strong>{" "}
               {new Date(
-                chapterDetails?.videos?.uploadDate
+                chapterDetails?.uploadDate
               ).toLocaleDateString()}
             </Typography>
             <Box sx={{ mt: 2 }}>
               <iframe
                 width="100%"
                 height="400"
-                src={chapterDetails?.videos?.videoUrl}
-                title={chapterDetails?.videos?.title}
+                src={chapterDetails?.videoUrl}
+                title={chapterDetails?.title}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             </Box>
             <Link
-              href={chapterDetails?.videos?.videoUrl}
+              href={chapterDetails?.videoUrl}
               target="_blank"
               rel="noopener"
             >
-              Watch on {chapterDetails?.videos?.videoSource}
+              Watch on {chapterDetails?.videoSource}
             </Link>
           </Box>
+           ))
+          }
         </MainCard>
       </Grid>
+       
+      
     </Box>
   );
 };
 
 export default AdminChapterDetailPage;
+
+
+// const [
+//     videoAttendanceResponse,
+//     videoAttendanceResponseError,
+//     videoAttendanceResponseIsLoading,
+//     fetchvideoAttendanceResponse,
+//   ] = useAxiosDataFunction();
+
+//   // Fetch all chapters
+//   const getvideoAttendanceResponse = (videoId) => {
+//     fetchvideoAttendanceResponse({
+//       axiosInstance: axios,
+//       method: "get",
+//       url: `localhost:8000/api/v1/academic/video/${videoId}/attendance`,
+//       token: accessToken,
+//     });
+//   };

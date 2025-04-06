@@ -5,6 +5,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   data: null,
+  additionalData: null
 };
 
 export const authSlice = createSlice({
@@ -14,6 +15,7 @@ export const authSlice = createSlice({
     login: (state, action) => {
         state.isLoggedin = true
         state.data = action.payload.data
+        state.additionalData = action.payload.additionalData
     },
     logout : (state, action)=>{
         state.isLoggedin = false

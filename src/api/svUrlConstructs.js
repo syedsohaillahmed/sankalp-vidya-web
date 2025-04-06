@@ -28,6 +28,13 @@ export const getAllChapterUC = ()=>{
   return `${baseUrl}/academic/chapter`
 }
 
+export const getClass9ChapterUC = ()=>{
+  return `${baseUrl}/academic/chapter?page=1&limit=100&classId=67b0c70c4d2ec69a23910596&subjectId=67b0c7404d2ec69a2391059f`
+}
+
+// GET /api/chapters?page=2&limit=10&classId=someClassId&subjectId=someSubjectId
+
+
 export const getChapterDetailsUC = (chapterId)=>{
   return `${baseUrl}/academic/chapter/${chapterId}`
 }

@@ -8,6 +8,7 @@ import { login } from "../../features/authSlice";
 import { useForm } from "react-hook-form";
 import useAxiosFunction from "../../hooks/useAxiosFunction";
 import axios from "../../api/axiosHeaders";
+import useAxiosDataFunction from "../../hooks/useAxiosDataFunction";
 
 const Login = () => {
   const theme = useTheme();
@@ -33,8 +34,34 @@ const Login = () => {
     });
   };
 
+  const [
+    allChapterResponse,
+    allChapterError,
+    allChapterIsLoading,
+    fetchAllChapter,
+  ] = useAxiosDataFunction();
+
+  // Fetch all chapters
+  const getAllChapter = (sid) => {
+    console.log("coming inside 22");
+
+    fetchAllChapter({
+
+      axiosInstance: axios,
+      method: "get",
+      url: `localhost:8000/api/v1/users/student/${sid}`,
+      token: "",
+    });
+  };
   useEffect(() => {
     if (response?.statuscode === 200) {
+      if (response?.data?.roleDetails?.roleDisplayName === "Student") {
+        console.log("coming inside");
+        getAllChapter(123);
+
+      }
+
+      console.log("response", response);
       dispatch(login({ data: response.data }));
     }
   }, [response, error, loading]);
